@@ -1,7 +1,19 @@
 import './App.css';
 import React from 'react';
+import { db } from './firebase';
+import { useEffect, useState } from 'react';
+import { doc, getDoc } from 'firebase/firestore';
 
 function App() {
+  //const [test, setTest] = useState();
+  /*async function getTest() {
+    const docRef = doc(db,"items","1");
+    const docSnap = await getDoc(docRef);
+
+    if (docSnap.exists()) {
+      setTest(docSnap.data())
+    }
+  }*/
   const handleClick = (e) => {
     //console.log(e.target);
     //console.log(e.target.value);
@@ -12,6 +24,11 @@ function App() {
       alert("");
     }
   };
+
+  //최초 마운트 시 getTest import
+  /*useEffect(() => {
+    getTest()
+  }, [])*/
 
   return (
     <div className='container'>
@@ -34,6 +51,11 @@ function App() {
         <button onClick={handleClick} value="4학년">4학년</button>
       </div>
       </div>
+
+      {/*<div>
+        {test !== undefined &&
+        <div>{test.name}</div>}
+      </div>*/}
     </div>
   );
 }
