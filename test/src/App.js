@@ -5,15 +5,15 @@ import { useEffect, useState } from 'react';
 import { doc, getDoc } from 'firebase/firestore';
 
 function App() {
-  //const [test, setTest] = useState();
-  /*async function getTest() {
-    const docRef = doc(db,"items","1");
+  const [test, setTest] = useState();
+  async function getTest() {
+    const docRef = doc(db,"item","1");
     const docSnap = await getDoc(docRef);
 
     if (docSnap.exists()) {
       setTest(docSnap.data())
     }
-  }*/
+  }
   const handleClick = (e) => {
     //console.log(e.target);
     //console.log(e.target.value);
@@ -26,9 +26,9 @@ function App() {
   };
 
   //최초 마운트 시 getTest import
-  /*useEffect(() => {
+  useEffect(() => {
     getTest()
-  }, [])*/
+  }, [])
 
   return (
     <div className='container'>
@@ -52,10 +52,10 @@ function App() {
       </div>
       </div>
 
-      {/*<div>
+      {<div>
         {test !== undefined &&
         <div>{test.name}</div>}
-      </div>*/}
+      </div>}
     </div>
   );
 }
