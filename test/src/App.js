@@ -33,29 +33,21 @@ function App() {
   return (
     <div className='container'>
       <div className='app'>
-      <div className='black-nav'>
-        <div>Quiz test Text</div>
-      </div>
-      <div className='question-selection'>
-        <h1 className='question-header'>
-          <span>1</span>/4
-        </h1>
-          <div className='question-text'>
-            test Text Question
+        <div className='header'>
+          <span>
+            <h1>quiz test</h1>
+          </span>
+        </div>
+        <div className='content'>
+          <p><span> </span></p>{/*몇번 문제 출력*/}
+          <h1> </h1> {/*문제 내용 출력*/}
+          <div> {/*db 불러옴*/}
+            {test !== undefined &&
+            <div>{test.name}</div>}
           </div>
-      </div>
-      <div className="question-section">
-        <button onClick={handleClick} value="1학년">1학년</button>
-        <button onClick={handleClick} value="2학년">2학년</button>
-        <button onClick={handleClick} value="3학년">3학년</button>
-        <button onClick={handleClick} value="4학년">4학년</button>
-      </div>
+        </div>
       </div>
 
-      {<div>
-        {test !== undefined &&
-        <div>{test.name}</div>}
-      </div>}
     </div>
   );
 }
