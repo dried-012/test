@@ -8,11 +8,18 @@ function App() {
   const [test, setTest] = useState();
   async function getTest() {
     const docRef = doc(db,"item","1");
-    const docSnap = await getDoc(docRef);
-
-    if (docSnap.exists()) {
-      setTest(docSnap.data())
+    try{
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
+        setTest(docSnap.data());
+      } else {
+        console.error("No such Document");
+      }
+    } catch (error) {
+      console.error("Error getting doc",error)
     }
+ 
+    
   }
   const handleClick = (e) => {
     //console.log(e.target);
