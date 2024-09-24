@@ -16,7 +16,7 @@ function App() {
         console.error("No such Document");
       }
     } catch (error) {
-      console.error("Error getting doc",error)
+      console.error("Error getting doc",error);
     }
  
     
