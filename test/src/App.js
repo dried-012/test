@@ -5,18 +5,26 @@ import { useEffect, useState } from 'react';
 import { doc, getDoc } from 'firebase/firestore';
 
 function App() {
+  console.error("app start");
   const [test, setTest] = useState();
+  console.error("db connect");
   async function getTest() {
+    console.error("getTest()");
     const docRef = doc(db,"item","1");
+    console.error("1");
     try{
+      console.error("1.5");
       const docSnap = await getDoc(docRef);
+      console.error("2");
       if (docSnap.exists()) {
         setTest(docSnap.data());
+        console.error("Yes such Document");
       } else {
         console.error("No such Document");
       }
     } catch (error) {
-      console.error("Error getting doc",error)
+      console.error("Error getting doc",error);
+      console.error("Error details:", error.message);
     }
  
     
