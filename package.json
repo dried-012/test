@@ -1,15 +1,9 @@
 {
   "dependencies": {
-<<<<<<< HEAD
-    "firebase": "^10.13.2",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1"
-=======
-    "firebase": "^10.13.1",
+    "firebase": "^10.14.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "web-vitals": "^4.2.3"
->>>>>>> cd440b28d2fbec8b132a2c05fd436b24c09e9602
   },
   "name": "test",
   "version": "1.0.0",
@@ -32,11 +26,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-<<<<<<< HEAD
   },
   "devDependencies": {
     "web-vitals": "^4.2.3"
-=======
->>>>>>> cd440b28d2fbec8b132a2c05fd436b24c09e9602
   }
 }

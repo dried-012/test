@@ -34,19 +34,11 @@ function App() {
 
   //최초 마운트 시 getTest import
   useEffect(() => {
-<<<<<<< HEAD
-    try{
-      console.log(db);
-      getTest();
-    } catch (error){
-      console.error(error);
-=======
     console.log(db);
     try {
       getTest()
     } catch (error) {
       console.log(error);
->>>>>>> cd440b28d2fbec8b132a2c05fd436b24c09e9602
     }
     
   }, [])
