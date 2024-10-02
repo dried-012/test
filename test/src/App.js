@@ -24,6 +24,7 @@ function App() {
       }
     } catch (error) {
       console.error("Error getting doc",error);
+      console.error("Error getting doc",error);
       console.error("Error details:", error.message);
     }
  
