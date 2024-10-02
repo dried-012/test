@@ -23,12 +23,10 @@ function App() {
         console.error("No such Document");
       }
     } catch (error) {
-      console.error("Error getting doc",error);
-      console.error("Error getting doc",error);
-      console.error("Error details:", error.message);
+      console.error("Error getting doc",error)
     }
- 
-    
+
+
   }
   const handleClick = (e) => {
     //console.log(e.target);
@@ -43,7 +41,13 @@ function App() {
 
   //최초 마운트 시 getTest import
   useEffect(() => {
-    getTest()
+    console.log(db);
+    try {
+      getTest()
+    } catch (error) {
+      console.log(error);
+    }
+
   }, [])
 
   return (
