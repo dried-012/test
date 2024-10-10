@@ -18,9 +18,14 @@ function App() {
     } catch (error) {
       console.error("Error getting doc",error)
     }
- 
-    
   }
+
+  async function buttonTest() {
+    var webUid = document.test.uid.value;
+    var webUpass = document.test.upass.value;
+    alert(webUid + ", " + webUpass);
+  }
+
   const handleClick = (e) => {
     //console.log(e.target);
     //console.log(e.target.value);
@@ -37,6 +42,7 @@ function App() {
     console.log(db);
     try {
       getTest()
+  
     } catch (error) {
       console.log(error);
     }
@@ -57,6 +63,13 @@ function App() {
           <div> {/*db 불러옴*/}
             {test !== undefined &&
             <div>{test.name}</div>}
+            
+            <form name="test">
+              <div>아이디: <input type="text" name="uid"></input></div>
+              <div>비밀번호: <input type="password" name="upass"></input></div>
+              {test !== undefined &&
+              <button onClick={buttonTest}>버튼클릭 이벤트 테스트 (onClick)</button>}
+            </form>
           </div>
         </div>
       </div>
