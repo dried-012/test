@@ -27,6 +27,7 @@ function App() {
     var webUpass = document.test.upass.value;
     alert(webUid + ", " + webUpass);
   }
+
   async function userAdd(data) {
     var userRef = null;
     var userNumber = null;
@@ -94,23 +95,19 @@ function App() {
           </form>
           </div>
         </div>
+
         <div className='content'>
           <p><span> </span></p>{/*몇번 문제 출력*/}
           <h1> </h1> {/*문제 내용 출력*/}
           <div> {/*db 불러옴*/}
             {test !== undefined &&
-<<<<<<< HEAD
             <div>{test.uid}</div>}
-=======
-            <div>{test.name}</div>}
-            
             <form name="test">
               <div>아이디: <input type="text" name="uid"></input></div>
               <div>비밀번호: <input type="password" name="upass"></input></div>
-              {test !== undefined &&
-              <button onClick={buttonTest}>버튼클릭 이벤트 테스트 (onClick)</button>}
+              <button onClick={buttonTest}>버튼클릭 이벤트 테스트 (onClick)</button>
             </form>
->>>>>>> 481109063d852fbf8460e44e9f9194871689ff03
+
           </div>
         </div>
       </div>
