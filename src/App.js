@@ -2,10 +2,11 @@ import './App.css';
 import React from 'react';
 import { db } from './firebase';
 import { useEffect, useState } from 'react';
-import { doc, getDoc } from 'firebase/firestore';
+import { doc, getDoc, setDoc } from 'firebase/firestore';
 
 function App() {
   const [test, setTest] = useState();
+  const [inputdata, setInputdata] = useState();
   async function getTest() {
     const docRef = doc(db,"item","1");
     try{
@@ -16,7 +17,7 @@ function App() {
         console.error("No such Document");
       }
     } catch (error) {
-      console.error("Error getting doc",error)
+      console.error("Error getting doc",error);
     }
   }
 
@@ -24,6 +25,14 @@ function App() {
     var webUid = document.test.uid.value;
     var webUpass = document.test.upass.value;
     alert(webUid + ", " + webUpass);
+  }
+  async function userAdd(data) {
+    const userRef = doc(db,"item");
+    try {
+      const addUser = await setDoc(userRef,data);
+    } catch (error) {
+      
+    }
   }
 
   const handleClick = (e) => {
@@ -36,7 +45,12 @@ function App() {
       alert("");
     }
   };
-
+  const insBtnClick =(e) =>{
+    e.preventDefault();
+    userAdd({
+      uid:inputdata,
+      upass:inputdata});
+  }
   //최초 마운트 시 getTest import
   useEffect(() => {
     console.log(db);
@@ -56,6 +70,17 @@ function App() {
           <span>
             <h1>quiz test</h1>
           </span>
+          test header
+          <div>
+          <form onSubmit={insBtnClick}>
+            <input
+              type="text"
+              value={inputdata}
+              onChange={(e)=>setInputdata(e.target.value)}
+            />
+            <button type="submit">insDb</button>
+          </form>
+          </div>
         </div>
         <div className='content'>
           <p><span> </span></p>{/*몇번 문제 출력*/}
