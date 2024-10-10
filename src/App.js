@@ -2,13 +2,14 @@ import './App.css';
 import React from 'react';
 import { db } from './firebase';
 import { useEffect, useState } from 'react';
-import { doc, getDoc, setDoc } from 'firebase/firestore';
+import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
 
 function App() {
   const [test, setTest] = useState();
-  const [inputdata, setInputdata] = useState();
+  const [inputid, setInputid] = useState();
+  const [inputpwd, setInputpwd] = useState();
   async function getTest() {
-    const docRef = doc(db,"item","1");
+    const docRef = doc(db,"item","userid");
     try{
       const docSnap = await getDoc(docRef);
       if (docSnap.exists()) {
@@ -22,29 +23,35 @@ function App() {
   }
 
   async function userAdd(data) {
-    const userRef = doc(db,"item");
+    var userRef = null;
+    var userNumber = null;
+    const docRef = doc(db,"countDB","counter");
     try {
-      const addUser = await setDoc(userRef,data);
+      const docSnap = await getDoc(docRef);
+      if(docSnap.exists){
+        userNumber = docSnap.data().userNum;
+        userRef = doc(db,"item",(userNumber).toString());
+        userNumber++;
+        await updateDoc(docRef,{
+          userNum:userNumber
+        })}
+      await setDoc(userRef,data);
     } catch (error) {
-      
+      console.log(error);
     }
   }
 
   const handleClick = (e) => {
-    //console.log(e.target);
-    //console.log(e.target.value);
-    const answer = e.target.value;
-    if(answer == "4학년"){
-      alert("");
-    }else{
-      alert("");
-    }
+    
   };
-  const insBtnClick =(e) =>{
+  const insBtnClick = (e) =>{
     e.preventDefault();
-    userAdd({
-      uid:inputdata,
-      upass:inputdata});
+    console.log("clickBtn");
+      userAdd({
+        uid:inputid,
+        upass:inputpwd});
+    
+    
   }
   //최초 마운트 시 getTest import
   useEffect(() => {
@@ -69,8 +76,13 @@ function App() {
           <form onSubmit={insBtnClick}>
             <input
               type="text"
-              value={inputdata}
-              onChange={(e)=>setInputdata(e.target.value)}
+              value={inputid}
+              onChange={(e)=>setInputid(e.target.value)}
+            />
+            <input
+              type="password"
+              value={inputpwd}
+              onChange={(e)=>setInputpwd(e.target.value)}
             />
             <button type="submit">insDb</button>
           </form>
@@ -81,7 +93,7 @@ function App() {
           <h1> </h1> {/*문제 내용 출력*/}
           <div> {/*db 불러옴*/}
             {test !== undefined &&
-            <div>{test.name}</div>}
+            <div>{test.uid}</div>}
           </div>
         </div>
       </div>
