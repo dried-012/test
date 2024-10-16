@@ -75,17 +75,20 @@ function App() {
           test header
           <div>
           <form onSubmit={insBtnClick}>
-            <input
-              type="text"
-              value={inputid}
-              onChange={(e)=>setInputid(e.target.value)}
-            />
-            <input
-              type="password"
-              value={inputpwd}
-              onChange={(e)=>setInputpwd(e.target.value)}
-            />
-            <button type="submit">insDb</button>
+            <div>
+              <input
+                type="text"
+                value={inputid}
+                onChange={(e)=>setInputid(e.target.value)}
+              />
+            </div>
+              <div><input
+                type="password"
+                value={inputpwd}
+                onChange={(e)=>setInputpwd(e.target.value)}
+              />
+              </div>
+              <button type="submit">dbins</button>
           </form>
           </div>
         </div>
