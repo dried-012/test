@@ -22,12 +22,6 @@ function App() {
     }
   }
 
-  async function buttonTest() {
-    var webUid = document.test.uid.value;
-    var webUpass = document.test.upass.value;
-    alert(webUid + ", " + webUpass);
-  }
-
   async function userAdd(data) {
     var userRef = null;
     var userNumber = null;
@@ -102,11 +96,7 @@ function App() {
           <div> {/*db 불러옴*/}
             {test !== undefined &&
             <div>{test.uid}</div>}
-            <form name="test">
-              <div>아이디: <input type="text" name="uid"></input></div>
-              <div>비밀번호: <input type="password" name="upass"></input></div>
-              <button onClick={buttonTest}>버튼클릭 이벤트 테스트 (onClick)</button>
-            </form>
+            
 
           </div>
         </div>
