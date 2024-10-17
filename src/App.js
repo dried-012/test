@@ -2,6 +2,7 @@ import './App.css';
 import React from 'react';
 import { db } from './firebase';
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom'
 import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
 import { getAuth,signInWithEmailAndPassword,createUserWithEmailAndPassword } from 'firebase/auth';
 
@@ -34,7 +35,6 @@ function App() {
       try{
         const { user } = await createUserWithEmailAndPassword(auth, email, password);
         const { stsTokenManager,uid } = user;
-        setAuthInfo({ uid, email, authToken: stsTokenManager});
         //navigate('/');
       }catch(error){
         if(error.message!=="Firebase: Error (auth/email-already-in-use)."){
@@ -72,7 +72,9 @@ function App() {
     try {
       const {user} = await signInWithEmailAndPassword(auth,email, password);
       const {stsTokenManager, uid} = user;
-      setAuthInfo({ uid, email, authToken: stsTokenManager });
+      
+      uData = user.uid;
+      navigate('/');
     } catch (error) {
       console.log(error.message);
     }
@@ -132,6 +134,8 @@ function App() {
             </div>
               <button type="submit">login</button>
           </form>
+          ||
+          <div>logincheck {uData}</div>
           ||
           <form onSubmit={userjoin}>
             <div>
