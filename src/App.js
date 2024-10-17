@@ -3,11 +3,13 @@ import React from 'react';
 import { db } from './firebase';
 import { useEffect, useState } from 'react';
 import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
+import { getAuth,createUserWithEmailAndPassword } from 'firebase/auth';
 
 function App() {
   const [test, setTest] = useState();
   const [inputid, setInputid] = useState();
   const [inputpwd, setInputpwd] = useState();
+  
   async function getTest() {
     const docRef = doc(db,"item","userid");
     try{
@@ -22,6 +24,18 @@ function App() {
     }
   }
 
+  const userjoin = async(email, password)=>{
+    try{
+      const auth = getAuth();
+      const { user } = await createUserWithEmailAndPassword(auth, email, password);
+      const { stsTokenManager, uid } = user;
+      setAuthInfo({ uid, email, authToken: stsTokenManager });
+      //navigate('/');
+    }catch({ code, message }){
+      alert(errorMessage[code]);
+    }
+  }
+  
   async function userAdd(data) {
     var userRef = null;
     var userNumber = null;
@@ -46,11 +60,9 @@ function App() {
   };
   const insBtnClick = (e) =>{
     e.preventDefault();
-    console.log("clickBtn");
       userAdd({
         uid:inputid,
         upass:inputpwd});
-    
     
   }
   //최초 마운트 시 getTest import
@@ -74,18 +86,16 @@ function App() {
           </span>
           test header
           <div>
-          <form onSubmit={insBtnClick}>
+          <form onSubmit={userjoin}>
             <div>
               <input
-                type="text"
-                value={inputid}
-                onChange={(e)=>setInputid(e.target.value)}
+                type="email"
+                id="email"
               />
             </div>
               <div><input
                 type="password"
-                value={inputpwd}
-                onChange={(e)=>setInputpwd(e.target.value)}
+                id="password"
               />
               </div>
               <button type="submit">dbins</button>
