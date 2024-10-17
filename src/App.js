@@ -3,10 +3,14 @@ import React from 'react';
 import { db } from './firebase';
 import { useEffect, useState } from 'react';
 import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
-import { getAuth,createUserWithEmailAndPassword } from 'firebase/auth';
+import { getAuth,signInWithEmailAndPassword,createUserWithEmailAndPassword } from 'firebase/auth';
 
 function App() {
   const [test, setTest] = useState();
+  const [email, setEmail] = useState();
+  const [password, setPassword] = useState();
+  const auth = getAuth();
+  var uData = null;
   const [inputid, setInputid] = useState();
   const [inputpwd, setInputpwd] = useState();
   
@@ -24,16 +28,24 @@ function App() {
     }
   }
 
-  const userjoin = async(email, password)=>{
-    try{
-      const auth = getAuth();
-      const { user } = await createUserWithEmailAndPassword(auth, email, password);
-      const { stsTokenManager, uid } = user;
-      setAuthInfo({ uid, email, authToken: stsTokenManager });
-      //navigate('/');
-    }catch({ code, message }){
-      alert(errorMessage[code]);
+  const userjoin = async (e) =>{
+    e.preventDefault();
+    if(document.getElementById("checkPass").value == password){
+      try{
+        const { user } = await createUserWithEmailAndPassword(auth, email, password);
+        const { stsTokenManager,uid } = user;
+        setAuthInfo({ uid, email, authToken: stsTokenManager});
+        //navigate('/');
+      }catch(error){
+        if(error.message!=="Firebase: Error (auth/email-already-in-use)."){
+          alert(error.message);
+        }
+        alert("이미가입된 이메일입니다");
+      }
+    }else{
+      alert("비밀번호가 다릅니다");
     }
+    
   }
   
   async function userAdd(data) {
@@ -55,9 +67,21 @@ function App() {
     }
   }
 
+  const login = async (e) =>{
+    e.preventDefault();
+    try {
+      const {user} = await signInWithEmailAndPassword(auth,email, password);
+      const {stsTokenManager, uid} = user;
+      setAuthInfo({ uid, email, authToken: stsTokenManager });
+    } catch (error) {
+      console.log(error.message);
+    }
+  }
+
   const handleClick = (e) => {
     
   };
+
   const insBtnClick = (e) =>{
     e.preventDefault();
       userAdd({
@@ -65,23 +89,16 @@ function App() {
         upass:inputpwd});
   }
 
-  document.getElementById('signupform').addEventListener('submit', (e) => {
-    e.preventDefault(); 
-    const email = document.getElementById('email').value;
-    const password = document.getElementById('password').value;
-    userjoin(email, password);
-  });
 
   //최초 마운트 시 getTest import
   useEffect(() => {
     console.log(db);
     try {
-      getTest()
+      getTest();
   
     } catch (error) {
       console.log(error);
     }
-    
   }, [])
 
   return (
@@ -93,20 +110,57 @@ function App() {
           </span>
           test header
           <div>
-          <form id="signupform">
+          {uData == null&&
+          <form onSubmit={login}>
+            <div>
+              <input
+              type="email"
+              value={email}
+              onChange={(e)=>setEmail(e.target.value)}
+              required
+              placeholder="email@xxxxx.com"
+            />
+            </div>
+            <div>
+            <input
+                type="password"
+                value={password}
+                onChange={(e)=>setPassword(e.target.value)}
+                required
+                placeholder="비밀번호"
+              />
+            </div>
+              <button type="submit">login</button>
+          </form>
+          ||
+          <form onSubmit={userjoin}>
             <div>
               <input
                 type="email"
-                id="email"
+                value={email}
+                onChange={(e)=>setEmail(e.target.value)}
+                required
+                placeholder="email@xxxxx.com"
               />
             </div>
               <div><input
                 type="password"
-                id="password"
+                value={password}
+                onChange={(e)=>setPassword(e.target.value)}
+                required
+                placeholder="비밀번호"
+              />
+              </div>
+              <div><input
+                type="password"
+                id="checkPass"
+                placeholder="비밀번호확인"
               />
               </div>
               <button type="submit">dbins</button>
           </form>
+        }
+        <button >signup</button>
           </div>
         </div>
 
