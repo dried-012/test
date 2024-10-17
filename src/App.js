@@ -63,8 +63,15 @@ function App() {
       userAdd({
         uid:inputid,
         upass:inputpwd});
-    
   }
+
+  document.getElementById('signupform').addEventListener('submit', (e) => {
+    e.preventDefault(); 
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+    userjoin(email, password);
+  });
+
   //최초 마운트 시 getTest import
   useEffect(() => {
     console.log(db);
@@ -86,7 +93,7 @@ function App() {
           </span>
           test header
           <div>
-          <form onSubmit={userjoin}>
+          <form id="signupform">
             <div>
               <input
                 type="email"
