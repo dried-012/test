@@ -4,17 +4,19 @@ import { db } from './firebase';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom'
 import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
-import { getAuth,signInWithEmailAndPassword,createUserWithEmailAndPassword } from 'firebase/auth';
+import { getAuth,signInWithEmailAndPassword,createUserWithEmailAndPassword,signOut } from 'firebase/auth';
 
 function App() {
   const [test, setTest] = useState();
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
   const auth = getAuth();
-  var uData = null;
+  const [uData, setuData] = useState();
   const [inputid, setInputid] = useState();
   const [inputpwd, setInputpwd] = useState();
-  
+  const navigate = useNavigate();
+  var isSignin=false;
+
   async function getTest() {
     const docRef = doc(db,"item","userid");
     try{
@@ -70,18 +72,29 @@ function App() {
   const login = async (e) =>{
     e.preventDefault();
     try {
-      const {user} = await signInWithEmailAndPassword(auth,email, password);
-      const {stsTokenManager, uid} = user;
-      
-      uData = user.uid;
-      navigate('/');
+      signInWithEmailAndPassword(auth,email, password).then((result)=>{
+        console.log(result);
+        const user = result.user;
+        setuData(user.uid);
+        navigate('/');
+      })
     } catch (error) {
       console.log(error.message);
     }
   }
+  const logout = async (e) =>{
+    const auth = getAuth();
+    signOut(auth).then(()=>{
+      console.log("logout Success");
+      navigate('/');
+    }).catch((error)=>{
+
+    });
+  };
 
   const handleClick = (e) => {
-    
+    alert("btnchk");
+    isSignin = true;
   };
 
   const insBtnClick = (e) =>{
@@ -104,6 +117,7 @@ function App() {
   }, [])
 
   return (
+    
     <div className='container'>
       <div className='app'>
         <div className='header'>
@@ -112,7 +126,7 @@ function App() {
           </span>
           test header
           <div>
-          {uData == null&&
+          {uData==undefined && !isSignin &&
           <form onSubmit={login}>
             <div>
               <input
@@ -133,9 +147,14 @@ function App() {
               />
             </div>
               <button type="submit">login</button>
+              <button onClick={handleClick}>signup</button>
           </form>
           ||
-          <div>logincheck {uData}</div>
+          <div>
+            loginChk
+            {uData}
+            <button onClick={logout}>logout</button>
+          </div>
           ||
           <form onSubmit={userjoin}>
             <div>
@@ -162,9 +181,9 @@ function App() {
               />
               </div>
               <button type="submit">dbins</button>
+              
           </form>
         }
-        <button >signup</button>
           </div>
         </div>
 
@@ -175,12 +194,14 @@ function App() {
             {test !== undefined &&
             <div>{test.uid}</div>}
             
+            <div>{uData}</div>
 
           </div>
         </div>
       </div>
 
     </div>
+    
   );
 }
 
