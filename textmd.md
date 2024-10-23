@@ -12,3 +12,5 @@ fnm use --install-if-missing 20
 
 npm install -g react-scripts
 npm i react react-dom
+
+npm i redux-persist
