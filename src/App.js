@@ -15,7 +15,7 @@ function App() {
   const [inputid, setInputid] = useState();
   const [inputpwd, setInputpwd] = useState();
   const navigate = useNavigate();
-  var isSignin=false;
+  const [isSignin, setisSignin] = useState(false);
 
   async function getTest() {
     const docRef = doc(db,"item","userid");
@@ -37,7 +37,7 @@ function App() {
       try{
         const { user } = await createUserWithEmailAndPassword(auth, email, password);
         const { stsTokenManager,uid } = user;
-        //navigate('/');
+        navigate('/');
       }catch(error){
         if(error.message!=="Firebase: Error (auth/email-already-in-use)."){
           alert(error.message);
@@ -83,18 +83,24 @@ function App() {
     }
   }
   const logout = async (e) =>{
-    const auth = getAuth();
-    signOut(auth).then(()=>{
-      console.log("logout Success");
-      navigate('/');
-    }).catch((error)=>{
-
-    });
+    try {
+      const auth = getAuth();
+      signOut(auth).then(()=>{
+        window.location.replace("/");
+      }).catch((error)=>{
+        console.log(error.message);
+      });
+    } catch (error) {
+      
+    }
+    
   };
 
   const handleClick = (e) => {
-    alert("btnchk");
-    isSignin = true;
+    if(!isSignin)
+      setisSignin(true);
+    else
+      setisSignin(false);
   };
 
   const insBtnClick = (e) =>{
@@ -110,7 +116,6 @@ function App() {
     console.log(db);
     try {
       getTest();
-  
     } catch (error) {
       console.log(error);
     }
@@ -126,7 +131,7 @@ function App() {
           </span>
           test header
           <div>
-          {uData==undefined && !isSignin &&
+          {uData == undefined && !isSignin &&
           <form onSubmit={login}>
             <div>
               <input
@@ -149,10 +154,12 @@ function App() {
               <button type="submit">login</button>
               <button onClick={handleClick}>signup</button>
           </form>
-          ||
+          || uData!==undefined &&
           <div>
             loginChk
+            <br></br>
             {uData}
+            <br></br>
             <button onClick={logout}>logout</button>
           </div>
           ||
@@ -181,7 +188,7 @@ function App() {
               />
               </div>
               <button type="submit">dbins</button>
-              
+              <button onClick={handleClick}>back</button>
           </form>
         }
           </div>
