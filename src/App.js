@@ -3,7 +3,7 @@ import React from 'react';
 import { db,_apiKey } from './firebase';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom'
-import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
+import { doc, getDoc, setDoc, updateDoc, getFirestore } from 'firebase/firestore';
 import { getAuth,signInWithEmailAndPassword,createUserWithEmailAndPassword,signOut, setPersistence, browserSessionPersistence, onAuthStateChanged } from 'firebase/auth';
 
 function App() {
@@ -49,7 +49,7 @@ function App() {
     }else{
       alert("비밀번호가 다릅니다");
     }
-    
+
   }
 
   async function userAdd(data) {
@@ -76,13 +76,14 @@ function App() {
     try {
       setPersistence(auth,browserSessionPersistence).then(()=>{
         signInWithEmailAndPassword(auth,email, password).then((result)=>{
+          setIsLogined(true);
           console.log(result);
           const user = result.user;
           setuData(user.uid);
           navigate('/');
         });
       });
-      
+
     } catch (error) {
       console.log(error.message);
     }
@@ -92,15 +93,16 @@ function App() {
       const auth = getAuth();
       signOut(auth).then(()=>{
         window.location.replace("/");
+        setIsLogined(false);
       }).catch((error)=>{
         console.log(error.message);
       });
     } catch (error) {
-      
+
     }
-    
+
   };
-  
+
   const handleClick = (e) => {
     if(!isSignin)
       setisSignin(true);
@@ -135,7 +137,7 @@ function App() {
   }, [])
 
   return (
-    
+
     <div className='container'>
       <div className='app'>
         <div className='header'>
@@ -213,7 +215,11 @@ function App() {
           <div> {/*db 불러옴*/}
             {test !== undefined &&
             <div>{test.uid}</div>}
+<<<<<<< HEAD
               
+=======
+
+>>>>>>> 2f60a16827a28baca98a15d386f28c5b63463df2
             <div>{uData}</div>
 
           </div>
@@ -221,7 +227,7 @@ function App() {
       </div>
 
     </div>
-    
+
   );
 }
 
