@@ -4,7 +4,7 @@ import { db,_apiKey } from './firebase';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom'
 import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
-import { getAuth,signInWithEmailAndPassword,createUserWithEmailAndPassword,signOut, setPersistence, browserSessionPersistence } from 'firebase/auth';
+import { getAuth,signInWithEmailAndPassword,createUserWithEmailAndPassword,signOut, setPersistence, browserSessionPersistence, onAuthStateChanged } from 'firebase/auth';
 import firebase from 'firebase/compat/app';
 
 function App() {
@@ -17,9 +17,8 @@ function App() {
   const [inputpwd, setInputpwd] = useState();
   const navigate = useNavigate();
   const [isSignin, setisSignin] = useState(false);
-  const _session_Key = 'firebase:authUser:'+_apiKey+':[DEFAULT]';
-  const is_session = sessionStorage.getItem(_session_Key)?true:false;
-
+  const [isLogined,setisLogined] = useState(false);
+  
   async function getTest() {
     const docRef = doc(db,"item","userid");
     try{
@@ -53,7 +52,7 @@ function App() {
     }
     
   }
-  
+
   async function userAdd(data) {
     var userRef = null;
     var userNumber = null;
@@ -122,9 +121,15 @@ function App() {
     console.log(db);
     try {
       getTest();
-      if(is_session){
-        alert("chk complete");
-      }
+      const unsubcribe = onAuthStateChanged(auth,(user)=>{
+        if(user){
+          setisLogined(true);
+          setuData(user.uid);
+        }else{
+          setisLogined(false);
+        }
+      })
+      return unsubcribe;
     } catch (error) {
       console.log(error);
     }
@@ -140,7 +145,7 @@ function App() {
           </span>
           test header
           <div>
-          {uData == undefined && !isSignin &&
+          {uData == undefined && !isSignin && !isLogined &&
           <form onSubmit={login}>
             <div>
               <input
@@ -163,7 +168,7 @@ function App() {
               <button type="submit">login</button>
               <button onClick={handleClick}>signup</button>
           </form>
-          || uData!==undefined &&
+          || isLogined &&
           <div>
             loginChk
             <br></br>
@@ -171,7 +176,7 @@ function App() {
             <br></br>
             <button onClick={logout}>logout</button>
           </div>
-          ||
+          || !isLogined &&
           <form onSubmit={userjoin}>
             <div>
               <input
