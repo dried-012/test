@@ -1,6 +1,6 @@
 import './App.css';
 import React from 'react';
-import { db } from './firebase';
+import { db,_apiKey } from './firebase';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom'
 import { doc, getDoc, setDoc, updateDoc, getFirestore } from 'firebase/firestore';
@@ -16,9 +16,7 @@ function App() {
   const [inputpwd, setInputpwd] = useState();
   const navigate = useNavigate();
   const [isSignin, setisSignin] = useState(false);
-
-  const [isLogined, setIsLogined] = useState(false);
-  const db = getFirestore();
+  const [isLogined,setisLogined] = useState(false);
 
   async function getTest() {
     const docRef = doc(db,"item","userid");
@@ -51,9 +49,9 @@ function App() {
     }else{
       alert("비밀번호가 다릅니다");
     }
-    
+
   }
-  
+
   async function userAdd(data) {
     var userRef = null;
     var userNumber = null;
@@ -85,7 +83,7 @@ function App() {
           navigate('/');
         });
       });
-      
+
     } catch (error) {
       console.log(error.message);
     }
@@ -100,9 +98,9 @@ function App() {
         console.log(error.message);
       });
     } catch (error) {
-      
+
     }
-    
+
   };
 
   const handleClick = (e) => {
@@ -124,28 +122,22 @@ function App() {
     console.log(db);
     try {
       getTest();
-
-      const testtest = onAuthStateChanged(auth, (user) => {
-        if (user) {
-          console.log("User is signed in");
-          setIsLogined(true);
+      const unsubcribe = onAuthStateChanged(auth,(user)=>{
+        if(user){
+          setisLogined(true);
           setuData(user.uid);
-        } else {
-          console.log("No user is signed in");
-          setIsLogined(false);
-          setuData(null);
+        }else{
+          setisLogined(false);
         }
-      });
-
-      return () => testtest();
-
+      })
+      return unsubcribe;
     } catch (error) {
       console.log(error);
     }
   }, [])
 
   return (
-    
+
     <div className='container'>
       <div className='app'>
         <div className='header'>
@@ -177,7 +169,7 @@ function App() {
               <button type="submit">login</button>
               <button onClick={handleClick}>signup</button>
           </form>
-          || uData!==undefined && isLogined &&
+          || isLogined &&
           <div>
             loginChk
             <br></br>
@@ -185,7 +177,7 @@ function App() {
             <br></br>
             <button onClick={logout}>logout</button>
           </div>
-          || uData == undefined && isSignin && !isLogined &&
+          || !isLogined &&
           <form onSubmit={userjoin}>
             <div>
               <input
@@ -223,7 +215,7 @@ function App() {
           <div> {/*db 불러옴*/}
             {test !== undefined &&
             <div>{test.uid}</div>}
-            
+
             <div>{uData}</div>
 
           </div>
@@ -231,7 +223,7 @@ function App() {
       </div>
 
     </div>
-    
+
   );
 }
 
