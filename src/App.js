@@ -1,10 +1,11 @@
 import './App.css';
 import React from 'react';
-import { db } from './firebase';
+import { db,_apiKey } from './firebase';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom'
 import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
 import { getAuth,signInWithEmailAndPassword,createUserWithEmailAndPassword,signOut, setPersistence, browserSessionPersistence } from 'firebase/auth';
+import firebase from 'firebase/compat/app';
 
 function App() {
   const [test, setTest] = useState();
@@ -16,6 +17,8 @@ function App() {
   const [inputpwd, setInputpwd] = useState();
   const navigate = useNavigate();
   const [isSignin, setisSignin] = useState(false);
+  const _session_Key = 'firebase:authUser:'+_apiKey+':[DEFAULT]';
+  const is_session = sessionStorage.getItem(_session_Key)?true:false;
 
   async function getTest() {
     const docRef = doc(db,"item","userid");
@@ -99,7 +102,7 @@ function App() {
     }
     
   };
-
+  
   const handleClick = (e) => {
     if(!isSignin)
       setisSignin(true);
@@ -119,7 +122,9 @@ function App() {
     console.log(db);
     try {
       getTest();
-      
+      if(is_session){
+        alert("chk complete");
+      }
     } catch (error) {
       console.log(error);
     }
