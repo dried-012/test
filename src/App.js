@@ -5,7 +5,6 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom'
 import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
 import { getAuth,signInWithEmailAndPassword,createUserWithEmailAndPassword,signOut, setPersistence, browserSessionPersistence, onAuthStateChanged } from 'firebase/auth';
-import firebase from 'firebase/compat/app';
 
 function App() {
   const [test, setTest] = useState();
@@ -18,7 +17,7 @@ function App() {
   const navigate = useNavigate();
   const [isSignin, setisSignin] = useState(false);
   const [isLogined,setisLogined] = useState(false);
-  
+
   async function getTest() {
     const docRef = doc(db,"item","userid");
     try{
@@ -214,7 +213,7 @@ function App() {
           <div> {/*db 불러옴*/}
             {test !== undefined &&
             <div>{test.uid}</div>}
-            
+              
             <div>{uData}</div>
 
           </div>
