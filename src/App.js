@@ -37,6 +37,7 @@ function App() {
       try{
         const { user } = await createUserWithEmailAndPassword(auth, email, password);
         const { stsTokenManager,uid } = user;
+        handleClick();
         navigate('/');
       }catch(error){
         if(error.message!=="Firebase: Error (auth/email-already-in-use)."){
@@ -115,7 +116,7 @@ function App() {
     console.log(db);
     try {
       getTest();
-      
+  
     } catch (error) {
       console.log(error);
     }
@@ -154,7 +155,7 @@ function App() {
               <button type="submit">login</button>
               <button onClick={handleClick}>signup</button>
           </form>
-          || uData!==undefined &&
+          || uData!==undefined&&
           <div>
             loginChk
             <br></br>
