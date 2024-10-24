@@ -3,8 +3,8 @@ import React from 'react';
 import { db } from './firebase';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom'
-import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
-import { getAuth,signInWithEmailAndPassword,createUserWithEmailAndPassword,signOut, setPersistence, browserSessionPersistence } from 'firebase/auth';
+import { doc, getDoc, setDoc, updateDoc, getFirestore } from 'firebase/firestore';
+import { getAuth,signInWithEmailAndPassword,createUserWithEmailAndPassword,signOut, setPersistence, browserSessionPersistence, onAuthStateChanged } from 'firebase/auth';
 
 function App() {
   const [test, setTest] = useState();
@@ -16,6 +16,9 @@ function App() {
   const [inputpwd, setInputpwd] = useState();
   const navigate = useNavigate();
   const [isSignin, setisSignin] = useState(false);
+
+  const [isLogined, setIsLogined] = useState(false);
+  const db = getFirestore();
 
   async function getTest() {
     const docRef = doc(db,"item","userid");
@@ -75,6 +78,7 @@ function App() {
     try {
       setPersistence(auth,browserSessionPersistence).then(()=>{
         signInWithEmailAndPassword(auth,email, password).then((result)=>{
+          setIsLogined(true);
           console.log(result);
           const user = result.user;
           setuData(user.uid);
@@ -91,6 +95,7 @@ function App() {
       const auth = getAuth();
       signOut(auth).then(()=>{
         window.location.replace("/");
+        setIsLogined(false);
       }).catch((error)=>{
         console.log(error.message);
       });
@@ -119,7 +124,21 @@ function App() {
     console.log(db);
     try {
       getTest();
-  
+
+      const testtest = onAuthStateChanged(auth, (user) => {
+        if (user) {
+          console.log("User is signed in");
+          setIsLogined(true);
+          setuData(user.uid);
+        } else {
+          console.log("No user is signed in");
+          setIsLogined(false);
+          setuData(null);
+        }
+      });
+
+      return () => testtest();
+
     } catch (error) {
       console.log(error);
     }
@@ -135,7 +154,7 @@ function App() {
           </span>
           test header
           <div>
-          {uData == undefined && !isSignin &&
+          {uData == undefined && !isSignin && !isLogined &&
           <form onSubmit={login}>
             <div>
               <input
@@ -158,7 +177,7 @@ function App() {
               <button type="submit">login</button>
               <button onClick={handleClick}>signup</button>
           </form>
-          || uData!==undefined&&
+          || uData!==undefined && isLogined &&
           <div>
             loginChk
             <br></br>
@@ -166,7 +185,7 @@ function App() {
             <br></br>
             <button onClick={logout}>logout</button>
           </div>
-          ||
+          || uData == undefined && isSignin && !isLogined &&
           <form onSubmit={userjoin}>
             <div>
               <input
