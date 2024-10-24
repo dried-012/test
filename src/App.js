@@ -215,11 +215,7 @@ function App() {
           <div> {/*db 불러옴*/}
             {test !== undefined &&
             <div>{test.uid}</div>}
-<<<<<<< HEAD
               
-=======
-
->>>>>>> 2f60a16827a28baca98a15d386f28c5b63463df2
             <div>{uData}</div>
 
           </div>
