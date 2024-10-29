@@ -145,7 +145,7 @@ function App() {
             <h1>quiz test</h1>
           </span>
           test header
-          <div>
+          <div id="loginDiv">
           {uData == undefined && !isSignin && !isLogined &&
           <form onSubmit={login}>
             <div>
@@ -171,8 +171,6 @@ function App() {
           </form>
           || isLogined &&
           <div>
-            loginChk
-            <br></br>
             {uData}
             <br></br>
             <button onClick={logout}>logout</button>
@@ -215,7 +213,7 @@ function App() {
           <div> {/*db 불러옴*/}
             {test !== undefined &&
             <div>{test.uid}</div>}
-
+              
             <div>{uData}</div>
 
           </div>
