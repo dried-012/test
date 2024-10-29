@@ -76,7 +76,7 @@ function App() {
     try {
       setPersistence(auth,browserSessionPersistence).then(()=>{
         signInWithEmailAndPassword(auth,email, password).then((result)=>{
-          setIsLogined(true);
+          setisLogined(true);
           console.log(result);
           const user = result.user;
           setuData(user.uid);
@@ -171,8 +171,6 @@ function App() {
           </form>
           || isLogined &&
           <div>
-            loginChk
-            <br></br>
             {uData}
             <br></br>
             <button onClick={logout}>logout</button>
