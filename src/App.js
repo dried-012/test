@@ -93,7 +93,7 @@ function App() {
       const auth = getAuth();
       signOut(auth).then(()=>{
         window.location.replace("/");
-        setIsLogined(false);
+        setisLogined(false);
       }).catch((error)=>{
         console.log(error.message);
       });
