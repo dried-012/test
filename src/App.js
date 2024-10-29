@@ -144,7 +144,14 @@ function App() {
           <span>
             <h1>quiz test</h1>
           </span>
-          test header
+          <div id="navigateDiv">
+            <ul className="navigateBar">
+              <li><a>게시판</a></li>
+              <li><a>문제풀기</a></li>
+              <li><a>About</a></li>
+              <li><a>마이페이지</a></li>
+            </ul>
+          </div>
           <div id="loginDiv">
           {uData == undefined && !isSignin && !isLogined &&
           <form onSubmit={login}>
