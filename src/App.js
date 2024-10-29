@@ -76,7 +76,6 @@ function App() {
     try {
       setPersistence(auth,browserSessionPersistence).then(()=>{
         signInWithEmailAndPassword(auth,email, password).then((result)=>{
-          setIsLogined(true);
           setisLogined(true);
           console.log(result);
           const user = result.user;
@@ -94,7 +93,6 @@ function App() {
       const auth = getAuth();
       signOut(auth).then(()=>{
         window.location.replace("/");
-        setIsLogined(false);
         setisLogined(false);
       }).catch((error)=>{
         console.log(error.message);
