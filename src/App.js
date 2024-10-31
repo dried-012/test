@@ -18,6 +18,7 @@ function App() {
   const [isSignin, setisSignin] = useState(false);
   const [isLogined,setisLogined] = useState(false);
   const [testSubject, setTestSubject] = useState("");
+  const [boardData,setBoardData] = useState([]);
 
   async function getTest() {
     const docRef = doc(db,"item","userid");
@@ -52,7 +53,9 @@ function App() {
     }
 
   }
-
+  async function getBoard() {
+    const docRef = doc(db,"board");
+  }
   async function userAdd(data) {
     var userRef = null;
     var userNumber = null;
@@ -122,7 +125,13 @@ function App() {
     e.preventDefault();
     testAct(e.target.value);
   }
-
+  const pageUp = (e) => {
+    e.preventDefault();
+    switch(e.target.value){
+      case "ㅔㅁㅇㅁㅇ":
+      break;
+    }
+  }
   async function testAct(select) {
     switch(select){
       case "EIP_PT_2022_1":
@@ -172,7 +181,7 @@ function App() {
               <li><a>게시판</a></li>
               <li><a>문제풀기</a></li>
               <li><a>About</a></li>
-              <li><a>마이페이지</a></li>
+              <li><a onClick="">마이페이지</a></li>
             </ul>
           </div>
           <div id="loginDiv">
@@ -253,7 +262,6 @@ function App() {
           <div id="selectTestDiv">
             <button onClick={testButtonClick} value="EIP_PT_2022_1">정보처리기사 실기시험 2022년 1회</button>
           </div>
-
         </div>
       </div>
 
