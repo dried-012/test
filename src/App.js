@@ -215,6 +215,9 @@ function App() {
         </div>
 
         <div className='content'>
+          <div className='boardDiv'>
+            
+          </div>
           <p><span> </span></p>{/*몇번 문제 출력*/}
           <h1> </h1> {/*문제 내용 출력*/}
           <div> {/*db 불러옴*/}
@@ -222,7 +225,7 @@ function App() {
             <div>{test.uid}</div>}
               
             <div>{uData}</div>
-
+          
           </div>
         </div>
       </div>
