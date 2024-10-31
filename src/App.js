@@ -17,6 +17,7 @@ function App() {
   const navigate = useNavigate();
   const [isSignin, setisSignin] = useState(false);
   const [isLogined,setisLogined] = useState(false);
+  const [testSubject, setTestSubject] = useState("");
 
   async function getTest() {
     const docRef = doc(db,"item","userid");
@@ -117,6 +118,22 @@ function App() {
         upass:inputpwd});
   }
 
+  const testButtonClick = (e) => {
+    e.preventDefault();
+    testAct(e.target.value);
+  }
+
+  async function testAct(select) {
+    switch(select){
+      case "EIP_PT_2022_1":
+        setTestSubject("engineerInformationProcessing_pT_2022_1");
+        break;
+      default:
+        break;
+    }
+    
+  }
+
   //최초 마운트 시 getTest import
   useEffect(() => {
     console.log(db);
@@ -129,12 +146,18 @@ function App() {
         }else{
           setisLogined(false);
         }
-      })
+      });
+
+      if (testSubject) {
+        alert(testSubject);
+        setTestSubject("");
+      }
+
       return unsubcribe;
     } catch (error) {
       console.log(error);
     }
-  }, [])
+  }, [testSubject]);
 
   return (
 
@@ -227,6 +250,10 @@ function App() {
             <div>{uData}</div>
           
           </div>
+          <div id="selectTestDiv">
+            <button onClick={testButtonClick} value="EIP_PT_2022_1">정보처리기사 실기시험 2022년 1회</button>
+          </div>
+
         </div>
       </div>
 
