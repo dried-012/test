@@ -44,5 +44,24 @@
   float: right;
   border: 1px solid red;
   text-align: center;
-  
+}
+.content{
+  margin-top: 150px;
+}
+#navigateDiv{
+  width: auto;
+  height: 100px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  padding-left: 0;
+}
+.navigateBar{
+  width: 780px;
+  list-style: none;
+  padding-left: 0;
+}
+.navigateBar li{
+  padding: 18px 10px;
+  float: left;
 }
