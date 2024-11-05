@@ -158,7 +158,7 @@ function App() {
       break;
     }
   }
-  async function testAct(select) {
+  async function testAct(select, range) {
     switch(select){
       case "EIP_PT_2022_1":
         setTestSubject("engineerInformationProcessing_pT_2022_1");
