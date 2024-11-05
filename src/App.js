@@ -22,6 +22,7 @@ function App() {
   const [testSubject, setTestSubject] = useState("");
   const [testContent, setTestContent] = useState([]);
   const [testRange, setTestRange] = useState(20);
+  const [boardData,setBoardData] = useState([]);
 
   async function getTest() {
     const docRef = doc(db,"item","userid");
@@ -52,7 +53,7 @@ function App() {
       } catch (error) {
         console.error("Error getting doc",error);
       }
-      
+
     }
     setTestContent(contentArray);
   }
@@ -76,7 +77,9 @@ function App() {
     }
 
   }
-
+  async function getBoard() {
+    const docRef = doc(db,"board");
+  }
   async function userAdd(data) {
     var userRef = null;
     var userNumber = null;
@@ -148,8 +151,14 @@ function App() {
     const range = e.target.getAttribute("data-range");
     testAct(value, range);
   }
-
-  async function testAct(select, range) {
+  const pageUp = (e) => {
+    e.preventDefault();
+    switch(e.target.value){
+      case "ㅔㅁㅇㅁㅇ":
+      break;
+    }
+  }
+  async function testAct(select) {
     switch(select){
       case "EIP_PT_2022_1":
         setTestSubject("engineerInformationProcessing_pT_2022_1");
@@ -199,7 +208,7 @@ function App() {
               <li><a>게시판</a></li>
               <li><a>문제풀기</a></li>
               <li><a>About</a></li>
-              <li><a>마이페이지</a></li>
+              <li><a onClick="">마이페이지</a></li>
             </ul>
           </div>
           <div id="loginDiv">
@@ -266,16 +275,16 @@ function App() {
 
         <div className='content'>
           <div className='boardDiv'>
-            
+
           </div>
           <p><span> </span></p>{/*몇번 문제 출력*/}
           <h1> </h1> {/*문제 내용 출력*/}
           <div> {/*db 불러옴*/}
             {test !== undefined &&
             <div>{test.uid}</div>}
-              
+
             <div>{uData}</div>
-          
+
           </div>
           <div id="selectTestDiv">
             <button onClick={testButtonClick} value="EIP_PT_2022_1" data-range="20">정보처리기사 실기시험 2022년 1회</button>
@@ -283,15 +292,15 @@ function App() {
           <div>
             { testContent.length > 0 &&
               testContent.map((content, index) => (
-              <div className="QuestionForm" key={index}> 
+              <div className="QuestionForm" key={index}>
                 <div> 문제 {content.num}번 </div>
                 <div> 제목: {content.title}  </div>
                 <div> 설명: {content.description}  </div>
                 <div> <textarea></textarea> </div>
                 <div className="Answer">
-                  <div className="AnswerCover"> 
+                  <div className="AnswerCover">
                     <span className="AnswerClicker"> 정답: </span>
-                  </div> 
+                  </div>
                   <div className="AnswerFadeIn">
                     <span className="AnswerText"> <br></br> {content.answer}</span>
                   </div>
@@ -299,7 +308,6 @@ function App() {
               </div>
             ))}
           </div>
-
         </div>
       </div>
 
