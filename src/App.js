@@ -158,6 +158,7 @@ function App() {
     e.preventDefault();
     const value = e.target.value;
     const range = e.target.getAttribute("data-range");
+    setIsAnswerShown([]);
     testAct(value, range);
   }
   const pageUp = (e) => {
@@ -169,6 +170,9 @@ function App() {
   }
   async function testAct(select, range) {
     switch(select){
+      case "EIP_PT_2021_3":
+        setTestSubject("eIP_pT_2021_3");
+        break;
       case "EIP_PT_2022_1":
         setTestSubject("engineerInformationProcessing_pT_2022_1");
         break;
@@ -296,6 +300,7 @@ function App() {
 
           </div>
           <div id="selectTestDiv">
+            <button onClick={testButtonClick} value="EIP_PT_2021_3" data-range="20">정보처리기사 실기시험 2021년 3회</button>
             <button onClick={testButtonClick} value="EIP_PT_2022_1" data-range="20">정보처리기사 실기시험 2022년 1회</button>
           </div>
           <div>
