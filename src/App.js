@@ -6,6 +6,8 @@ import { useNavigate } from 'react-router-dom'
 import { doc, getDoc, setDoc, updateDoc, getFirestore } from 'firebase/firestore';
 import { getAuth,signInWithEmailAndPassword,createUserWithEmailAndPassword,signOut, setPersistence, browserSessionPersistence, onAuthStateChanged } from 'firebase/auth';
 
+import './TestContent.css'
+
 function App() {
   const [test, setTest] = useState();
   const [email, setEmail] = useState();
@@ -18,6 +20,8 @@ function App() {
   const [isSignin, setisSignin] = useState(false);
   const [isLogined,setisLogined] = useState(false);
   const [testSubject, setTestSubject] = useState("");
+  const [testContent, setTestContent] = useState([]);
+  const [testRange, setTestRange] = useState(20);
 
   async function getTest() {
     const docRef = doc(db,"item","userid");
@@ -31,6 +35,26 @@ function App() {
     } catch (error) {
       console.error("Error getting doc",error);
     }
+  }
+
+  async function importTest() {
+    const contentArray = [];
+    for (let index = 1; index <= testRange; index++) {
+        var strIndex = (index).toString();
+        const docRef = doc(db, testSubject, strIndex);
+      try{
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+          contentArray.push(docSnap.data());
+        } else {
+          console.error("No such Document");
+        }
+      } catch (error) {
+        console.error("Error getting doc",error);
+      }
+      
+    }
+    setTestContent(contentArray);
   }
 
   const userjoin = async (e) =>{
@@ -120,10 +144,12 @@ function App() {
 
   const testButtonClick = (e) => {
     e.preventDefault();
-    testAct(e.target.value);
+    const value = e.target.value;
+    const range = e.target.getAttribute("data-range");
+    testAct(value, range);
   }
 
-  async function testAct(select) {
+  async function testAct(select, range) {
     switch(select){
       case "EIP_PT_2022_1":
         setTestSubject("engineerInformationProcessing_pT_2022_1");
@@ -131,7 +157,7 @@ function App() {
       default:
         break;
     }
-    
+    setTestRange(Number(range));
   }
 
   //최초 마운트 시 getTest import
@@ -150,6 +176,7 @@ function App() {
 
       if (testSubject) {
         alert(testSubject);
+        importTest();
         setTestSubject("");
       }
 
@@ -251,7 +278,26 @@ function App() {
           
           </div>
           <div id="selectTestDiv">
-            <button onClick={testButtonClick} value="EIP_PT_2022_1">정보처리기사 실기시험 2022년 1회</button>
+            <button onClick={testButtonClick} value="EIP_PT_2022_1" data-range="20">정보처리기사 실기시험 2022년 1회</button>
+          </div>
+          <div>
+            { testContent.length > 0 &&
+              testContent.map((content, index) => (
+              <div className="QuestionForm" key={index}> 
+                <div> 문제 {content.num}번 </div>
+                <div> 제목: {content.title}  </div>
+                <div> 설명: {content.description}  </div>
+                <div> <textarea></textarea> </div>
+                <div className="Answer">
+                  <div className="AnswerCover"> 
+                    <span className="AnswerClicker"> 정답: </span>
+                  </div> 
+                  <div className="AnswerFadeIn">
+                    <span className="AnswerText"> <br></br> {content.answer}</span>
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
 
         </div>
