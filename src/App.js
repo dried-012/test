@@ -23,6 +23,7 @@ function App() {
   const [testContent, setTestContent] = useState([]);
   const [testRange, setTestRange] = useState(20);
   const [boardData,setBoardData] = useState([]);
+  const [isAnswerShown, setIsAnswerShown] = useState(false);
 
   async function getTest() {
     const docRef = doc(db,"item","userid");
@@ -138,6 +139,10 @@ function App() {
       setisSignin(false);
   };
 
+  const answerClick = () => {
+    setIsAnswerShown(true);
+  };
+
   const insBtnClick = (e) =>{
     e.preventDefault();
       userAdd({
@@ -184,7 +189,7 @@ function App() {
       });
 
       if (testSubject) {
-        alert(testSubject);
+        // alert(testSubject);
         importTest();
         setTestSubject("");
       }
@@ -296,13 +301,20 @@ function App() {
                 <div> 문제 {content.num}번 </div>
                 <div> 제목: {content.title}  </div>
                 <div> 설명: {content.description}  </div>
-                <div> <textarea></textarea> </div>
-                <div className="Answer">
-                  <div className="AnswerCover">
-                    <span className="AnswerClicker"> 정답: </span>
-                  </div>
-                  <div className="AnswerFadeIn">
-                    <span className="AnswerText"> <br></br> {content.answer}</span>
+                <div> 정답: <textarea></textarea> </div>
+                <div 
+                  className={`Answer ${isAnswerShown ? 'clicked' : ''}`} 
+                  onClick={answerClick}
+                >
+                  {!isAnswerShown && (
+                    <div className="AnswerCover">
+                      <span className="AnswerClicker">정답 보기 (클릭)</span>
+                    </div>
+                  )}
+                  <div className={`AnswerFadeIn ${isAnswerShown ? 'visible' : ''}`}>
+                    <span className="AnswerText">
+                      <br /> {content.answer}
+                    </span>
                   </div>
                 </div>
               </div>
