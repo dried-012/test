@@ -23,7 +23,7 @@ function App() {
   const [testContent, setTestContent] = useState([]);
   const [testRange, setTestRange] = useState(20);
   const [boardData,setBoardData] = useState([]);
-  const [isAnswerShown, setIsAnswerShown] = useState(false);
+  const [isAnswerShown, setIsAnswerShown] = useState([]);
 
   async function getTest() {
     const docRef = doc(db,"item","userid");
@@ -139,8 +139,12 @@ function App() {
       setisSignin(false);
   };
 
-  const answerClick = () => {
-    setIsAnswerShown(true);
+  const answerClick = (index) => {
+    setIsAnswerShown((prev) => {
+      const updatedAnswers = [...prev];
+      updatedAnswers[index] = true; // 해당 인덱스만 true로 설정
+      return updatedAnswers;
+    });
   };
 
   const insBtnClick = (e) =>{
@@ -295,30 +299,31 @@ function App() {
             <button onClick={testButtonClick} value="EIP_PT_2022_1" data-range="20">정보처리기사 실기시험 2022년 1회</button>
           </div>
           <div>
-            { testContent.length > 0 &&
+            {testContent.length > 0 &&
               testContent.map((content, index) => (
-              <div className="QuestionForm" key={index}>
-                <div> 문제 {content.num}번 </div>
-                <div> 제목: {content.title}  </div>
-                <div> 설명: {content.description}  </div>
-                <div> 정답: <textarea></textarea> </div>
-                <div 
-                  className={`Answer ${isAnswerShown ? 'clicked' : ''}`} 
-                  onClick={answerClick}
-                >
-                  {!isAnswerShown && (
-                    <div className="AnswerCover">
-                      <span className="AnswerClicker">정답 보기 (클릭)</span>
+                <div className="QuestionForm" key={index}>
+                  <div>문제 {content.num}번</div>
+                  <div>제목: {content.title}</div>
+                  <div>설명: {content.description}</div>
+                  <div>정답: <textarea></textarea></div>
+                  
+                  <div
+                    className={`Answer ${isAnswerShown[index] ? 'clicked' : ''}`}
+                    onClick={() => answerClick(index)}
+                  >
+                    {!isAnswerShown[index] && (
+                      <div className="AnswerCover">
+                        <span className="AnswerClicker">정답 보기 (클릭)</span>
+                      </div>
+                    )}
+                    <div className={`AnswerFadeIn ${isAnswerShown[index] ? 'visible' : ''}`}>
+                      <span className="AnswerText">
+                        {content.answer}
+                      </span>
                     </div>
-                  )}
-                  <div className={`AnswerFadeIn ${isAnswerShown ? 'visible' : ''}`}>
-                    <span className="AnswerText">
-                      <br /> {content.answer}
-                    </span>
                   </div>
                 </div>
-              </div>
-            ))}
+              ))}
           </div>
         </div>
       </div>
