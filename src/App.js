@@ -22,7 +22,8 @@ function App() {
   const [testSubject, setTestSubject] = useState("");
   const [testContent, setTestContent] = useState([]);
   const [testRange, setTestRange] = useState(20);
-  const [boardData, setBoardData] = useState([]);
+  const [boardData,setBoardData] = useState([]);
+  const [isAnswerShown, setIsAnswerShown] = useState([]);
 
   async function getTest() {
     const docRef = doc(db,"item","userid");
@@ -148,6 +149,14 @@ function App() {
       setisSignin(false);
   };
 
+  const answerClick = (index) => {
+    setIsAnswerShown((prev) => {
+      const updatedAnswers = [...prev];
+      updatedAnswers[index] = true; // 해당 인덱스만 true로 설정
+      return updatedAnswers;
+    });
+  };
+
   const insBtnClick = (e) =>{
     e.preventDefault();
       userAdd({
@@ -159,6 +168,7 @@ function App() {
     e.preventDefault();
     const value = e.target.value;
     const range = e.target.getAttribute("data-range");
+    setIsAnswerShown([]);
     testAct(value, range);
   }
 
@@ -172,6 +182,9 @@ function App() {
 
   async function testAct(select, range) {
     switch(select){
+      case "EIP_PT_2021_3":
+        setTestSubject("eIP_pT_2021_3");
+        break;
       case "EIP_PT_2022_1":
         setTestSubject("engineerInformationProcessing_pT_2022_1");
         break;
@@ -197,7 +210,7 @@ function App() {
       });
 
       if (testSubject) {
-        alert(testSubject);
+        // alert(testSubject);
         importTest();
         setTestSubject("");
       }
@@ -319,26 +332,35 @@ function App() {
 
           </div>
           <div id="selectTestDiv">
+            <button onClick={testButtonClick} value="EIP_PT_2021_3" data-range="20">정보처리기사 실기시험 2021년 3회</button>
             <button onClick={testButtonClick} value="EIP_PT_2022_1" data-range="20">정보처리기사 실기시험 2022년 1회</button>
           </div>
           <div>
-            { testContent.length > 0 &&
+            {testContent.length > 0 &&
               testContent.map((content, index) => (
-              <div className="QuestionForm" key={index}>
-                <div> 문제 {content.num}번 </div>
-                <div> 제목: {content.title}  </div>
-                <div> 설명: {content.description}  </div>
-                <div> <textarea></textarea> </div>
-                <div className="Answer">
-                  <div className="AnswerCover">
-                    <span className="AnswerClicker"> 정답: </span>
-                  </div>
-                  <div className="AnswerFadeIn">
-                    <span className="AnswerText"> <br></br> {content.answer}</span>
+                <div className="QuestionForm" key={index}>
+                  <div>문제 {content.num}번</div>
+                  <div>제목: {content.title}</div>
+                  <div>설명: {content.description}</div>
+                  <div>정답: <textarea></textarea></div>
+                  
+                  <div
+                    className={`Answer ${isAnswerShown[index] ? 'clicked' : ''}`}
+                    onClick={() => answerClick(index)}
+                  >
+                    {!isAnswerShown[index] && (
+                      <div className="AnswerCover">
+                        <span className="AnswerClicker">정답 보기 (클릭)</span>
+                      </div>
+                    )}
+                    <div className={`AnswerFadeIn ${isAnswerShown[index] ? 'visible' : ''}`}>
+                      <span className="AnswerText">
+                        {content.answer}
+                      </span>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              ))}
           </div>
         </div>
       </div>
