@@ -3,7 +3,7 @@ import React from 'react';
 import { db,_apiKey } from './firebase';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom'
-import { doc, getDoc, setDoc, updateDoc, getFirestore } from 'firebase/firestore';
+import { doc, collection, getDoc, getDocs, setDoc, updateDoc, getFirestore, Timestamp } from 'firebase/firestore';
 import { getAuth,signInWithEmailAndPassword,createUserWithEmailAndPassword,signOut, setPersistence, browserSessionPersistence, onAuthStateChanged } from 'firebase/auth';
 
 import './TestContent.css'
@@ -22,7 +22,7 @@ function App() {
   const [testSubject, setTestSubject] = useState("");
   const [testContent, setTestContent] = useState([]);
   const [testRange, setTestRange] = useState(20);
-  const [boardData,setBoardData] = useState([]);
+  const [boardData, setBoardData] = useState([]);
 
   async function getTest() {
     const docRef = doc(db,"item","userid");
@@ -78,7 +78,17 @@ function App() {
 
   }
   async function getBoard() {
-    const docRef = doc(db,"board");
+    const dataArray = [];
+    const collRef = collection(db,"board");
+    const getDbContent = await getDocs(collRef);
+    getDbContent.forEach((doc) => {
+      const docData = doc.data();
+      if(docData.date && docData.date instanceof Timestamp){
+        docData.date = docData.date.toDate();
+      }
+      dataArray.push(docData);
+    });
+    setBoardData(dataArray);
   }
   async function userAdd(data) {
     var userRef = null;
@@ -151,6 +161,7 @@ function App() {
     const range = e.target.getAttribute("data-range");
     testAct(value, range);
   }
+
   const pageUp = (e) => {
     e.preventDefault();
     switch(e.target.value){
@@ -158,6 +169,7 @@ function App() {
       break;
     }
   }
+
   async function testAct(select, range) {
     switch(select){
       case "EIP_PT_2022_1":
@@ -174,6 +186,7 @@ function App() {
     console.log(db);
     try {
       getTest();
+      getBoard();
       const unsubcribe = onAuthStateChanged(auth,(user)=>{
         if(user){
           setisLogined(true);
@@ -275,7 +288,26 @@ function App() {
 
         <div className='content'>
           <div className='boardDiv'>
-
+            <div className='boardTopDiv'>
+              <ul>
+                <li>
+                  <div>NO</div>
+                  <div>제목</div>
+                  <div>작성자</div>
+                  <div>작성일</div>
+                </li>
+              </ul>
+            </div>
+            <div className='boardBodyDiv'>
+                {boardData.length > 0 &&
+                 boardData.map((item, idx)=>(
+                  <ul key={idx}>
+                    <div>{item.title}</div>
+                    <div>{item.date}</div>
+                  </ul>  
+                ))}
+              
+            </div>
           </div>
           <p><span> </span></p>{/*몇번 문제 출력*/}
           <h1> </h1> {/*문제 내용 출력*/}
