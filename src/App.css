@@ -63,5 +63,7 @@
 }
 .navigateBar li{
   padding: 18px 10px;
+  width: 160px;
+  text-align: center;
   float: left;
 }

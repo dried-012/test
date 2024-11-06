@@ -1,4 +1,5 @@
 import './App.css';
+import './css/Board.css';
 import React from 'react';
 import { db,_apiKey } from './firebase';
 import { useEffect, useState } from 'react';
@@ -312,14 +313,16 @@ function App() {
               </ul>
             </div>
             <div className='boardBodyDiv'>
+              <ul>
                 {boardData.length > 0 &&
                  boardData.map((item, idx)=>(
-                  <ul key={idx}>
+                  <li key={idx}>
                     <div>{item.title}</div>
-                    <div>{item.date}</div>
-                  </ul>  
+                    <div>{item.subject}</div>
+                    <div>{item.date.toLocaleDateString()}</div>
+                  </li>  
                 ))}
-              
+              </ul>
             </div>
           </div>
           <p><span> </span></p>{/*몇번 문제 출력*/}
