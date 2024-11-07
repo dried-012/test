@@ -305,10 +305,10 @@ function App() {
             <div className='boardTopDiv'>
               <ul>
                 <li>
-                  <div>NO</div>
-                  <div>제목</div>
-                  <div>작성자</div>
-                  <div>작성일</div>
+                  <div className='boardNo'>NO</div>
+                  <div className='boardTitle'>제목</div>
+                  <div className='boardSubject'>작성자</div>
+                  <div className='boardDate'>작성일</div>
                 </li>
               </ul>
             </div>
@@ -317,9 +317,10 @@ function App() {
                 {boardData.length > 0 &&
                  boardData.map((item, idx)=>(
                   <li key={idx}>
-                    <div>{item.title}</div>
-                    <div>{item.subject}</div>
-                    <div>{item.date.toLocaleDateString()}</div>
+                    <div className='boardNo'>{idx}</div>
+                    <div className='boardTitle'>{item.title}</div>
+                    <div className='boardSubject'>{item.subject}</div>
+                    <div className='boardDate'>{item.date.toLocaleDateString()}</div>
                   </li>  
                 ))}
               </ul>
