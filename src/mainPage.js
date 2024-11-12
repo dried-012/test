@@ -185,6 +185,9 @@ function App() {
     switch(e.target.value){
       case "mypage":
         navigate('/mypage');
+        break;
+      case "mytest":
+        navigate('/mytest');
       break;
     }
   }
@@ -285,7 +288,7 @@ function App() {
           <div id="navigateDiv">
             <ul className="navigateBar">
               <li><a>게시판</a></li>
-              <li><a>문제풀기</a></li>
+              <li><button onClick={pageUp} value='mytest'>문제풀기</button></li>
               <li><a>About</a></li>
               <li><button onClick={pageUp} value='mypage'>마이페이지</button></li>
             </ul>
@@ -374,7 +377,7 @@ function App() {
                     <div className='boardTitle'>{item.title}</div>
                     <div className='boardAuthor'>{item.author}</div>
                     <div className='boardDate'>{item.date.toLocaleDateString()}</div>
-                  </li>  
+                  </li>
                 ))}
               </ul>
             </div>
@@ -451,7 +454,7 @@ function App() {
                     <div>제목: {content.title}</div>
                     <div>설명: {content.description}</div>
                     <div>정답: <textarea></textarea></div>
-                    
+
                     <div
                       className={`Answer ${isAnswerShown[index] ? 'clicked' : ''}`}
                       onClick={() => answerClick(index)}
