@@ -5,7 +5,7 @@ import { db } from './firebase';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom'
 import { doc, collection, getDoc, getDocs, setDoc, updateDoc, Timestamp } from 'firebase/firestore';
-import { getAuth,signInWithEmailAndPassword,createUserWithEmailAndPassword,signOut, setPersistence, browserSessionPersistence, onAuthStateChanged } from 'firebase/auth';
+import { getAuth,signInWithEmailAndPassword,createUserWithEmailAndPassword, signOut, setPersistence, browserSessionPersistence, onAuthStateChanged } from 'firebase/auth';
 
 import './TestContent.css'
 
@@ -139,7 +139,7 @@ function App() {
   const pageUp = (e) => {
     e.preventDefault();
     switch(e.target.value){
-      case "mypage"://board
+      case "mypage":
         navigate('/mypage');
         break;
       case "mytest":
@@ -278,10 +278,6 @@ function App() {
           <p><span> </span></p>{/*몇번 문제 출력*/}
           <h1> </h1> {/*문제 내용 출력*/}
           <div> {/*db 불러옴*/}
-            {test !== undefined &&
-            <div>{test.uid}</div>}
-
-            <div>{uData !== undefined && uData}</div>
           </div>
         </div>
       </div>
