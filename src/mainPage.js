@@ -84,6 +84,7 @@ function App() {
     }
 
   }
+  
   async function getBoard() {
     const dataArray = [];
     const collRef = collection(db,"board");
@@ -97,6 +98,7 @@ function App() {
     });
     setBoardData(dataArray);
   }
+
   async function userAdd(data) {
     var userRef = null;
     var userNumber = null;
