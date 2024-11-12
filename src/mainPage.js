@@ -84,7 +84,7 @@ function App() {
     }
 
   }
-  
+
   async function getBoard() {
     const dataArray = [];
     const collRef = collection(db,"board");
@@ -183,12 +183,15 @@ function App() {
   const pageUp = (e) => {
     e.preventDefault();
     switch(e.target.value){
-      case "mypage":
+      case "mypage"://board
         navigate('/mypage');
         break;
       case "mytest":
         navigate('/mytest');
       break;
+      case "board":
+        navigate('/board');
+        break;
     }
   }
 
@@ -287,9 +290,9 @@ function App() {
           </span>
           <div id="navigateDiv">
             <ul className="navigateBar">
-              <li><a>게시판</a></li>
+              <li><button onClick={pageUp} value='board'>게시판</button></li>
               <li><button onClick={pageUp} value='mytest'>문제풀기</button></li>
-              <li><a>About</a></li>
+              <li><button>About</button></li>
               <li><button onClick={pageUp} value='mypage'>마이페이지</button></li>
             </ul>
           </div>
@@ -440,41 +443,7 @@ function App() {
               )}
             </div>
           </div>
-          {/*
-          <div>
-            <div id="selectTestDiv">
-              <button onClick={testButtonClick} value="EIP_PT_2021_3" data-range="20">정보처리기사 실기시험 2021년 3회</button>
-              <button onClick={testButtonClick} value="EIP_PT_2022_1" data-range="20">정보처리기사 실기시험 2022년 1회</button>
-            </div>
-            <div>
-              {testContent.length > 0 &&
-                testContent.map((content, index) => (
-                  <div className="QuestionForm" key={index}>
-                    <div>문제 {content.num}번</div>
-                    <div>제목: {content.title}</div>
-                    <div>설명: {content.description}</div>
-                    <div>정답: <textarea></textarea></div>
-
-                    <div
-                      className={`Answer ${isAnswerShown[index] ? 'clicked' : ''}`}
-                      onClick={() => answerClick(index)}
-                    >
-                      {!isAnswerShown[index] && (
-                        <div className="AnswerCover">
-                          <span className="AnswerClicker">정답 보기 (클릭)</span>
-                        </div>
-                      )}
-                      <div className={`AnswerFadeIn ${isAnswerShown[index] ? 'visible' : ''}`}>
-                        <span className="AnswerText">
-                          {content.answer}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-            </div>
-          </div>
-          */}
+          
         </div>
       </div>
 

@@ -1,4 +1,5 @@
 import React from "react";
+import '../css/Board.css';
 import { db,_apiKey } from '../firebase';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom'
