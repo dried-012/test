@@ -55,56 +55,56 @@ function Test(){
 
     return(
         <div>
-                      <div>
             <div>
-              <button onClick={testListButtonClick} value="eIP_pT" data-title="정보처리기사 실기">
-                정보처리기사 실기
-              </button>
-            </div>
-            <div>
-              {testList.map((docName, index) => (
-                <button key={index} onClick={() => handleDocClick(docName)} value={docName}>
-                  {formatDocName(docName)}
-                </button>
-              ))}
-            </div>
-            <div>
-              {selectedDocContent && (
                 <div>
-                  {Object.keys(selectedDocContent).map((key) => {
-                    const field = selectedDocContent[key];
-                    const isVisible = answerVisible[key]; // 각 문제별 정답 표시 상태
-
-                    return (
-                      <div key={key} className="question-block">
-                        <div><h2>문제 {field.num}</h2></div>
-                        <div>
-                          <p>제목: {field.title}</p>
-                          <p>설명: {field.description}</p>
-                        </div>
-                        <div><p>입력: <textarea></textarea></p></div>
-                        <div>
-                          <div>
-                            <div onClick={() => toggleAnswer(key)}>
-                              {!isVisible && (
-                                <span className="AnswerClicker">정답 및 해설 보기 (클릭)</span>
-                              )}
-                              {isVisible && (
-                                <div>
-                                  <p>정답: {field.answer}</p>
-                                  <p>해설: {field.explanation}</p>
-                                </div>
-                              )}
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    );
-                  })}
+                    <button onClick={testListButtonClick} value="eIP_pT" data-title="정보처리기사 실기">
+                        정보처리기사 실기
+                    </button>
                 </div>
-              )}
+                <div>
+                {testList.map((docName, index) => (
+                    <button key={index} onClick={() => handleDocClick(docName)} value={docName}>
+                    {formatDocName(docName)}
+                    </button>
+                ))}
+                </div>
+                <div>
+                {selectedDocContent && (
+                    <div>
+                    {Object.keys(selectedDocContent).map((key) => {
+                        const field = selectedDocContent[key];
+                        const isVisible = answerVisible[key]; // 각 문제별 정답 표시 상태
+
+                        return (
+                        <div key={key} className="question-block">
+                            <div><h2>문제 {field.num}</h2></div>
+                            <div>
+                            <p>제목: {field.title}</p>
+                            <p>설명: {field.description}</p>
+                            </div>
+                            <div><p>입력: <textarea></textarea></p></div>
+                            <div>
+                                <div>
+                                    <div onClick={() => toggleAnswer(key)}>
+                                    {!isVisible && (
+                                        <span className="AnswerClicker">정답 및 해설 보기 (클릭)</span>
+                                    )}
+                                    {isVisible && (
+                                        <div>
+                                        <p>정답: {field.answer}</p>
+                                        <p>해설: {field.explanation}</p>
+                                        </div>
+                                    )}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        );
+                    })}
+                    </div>
+                )}
+                </div>
             </div>
-          </div>
         </div>
     );
 }
