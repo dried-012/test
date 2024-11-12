@@ -1,8 +1,6 @@
 import './App.css';
 import './css/Board.css';
 import React from 'react';
-import myPage from './NavigateBar/Board';
-import myTest from './NavigateBar/Test';
 import { db,_apiKey } from './firebase';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom'
@@ -184,8 +182,7 @@ function App() {
     e.preventDefault();
     switch(e.target.value){
       case "mypage":
-        alert("aa");
-        navigate('/myPage');
+        navigate('/mypage');
       break;
     }
   }
@@ -288,7 +285,7 @@ function App() {
               <li><a>게시판</a></li>
               <li><a href='/NavigateBar/Test'>문제풀기</a></li>
               <li><a>About</a></li>
-              <li><a href='/NavigateBar/Board'>마이페이지</a></li>
+              <li><button onClick={pageUp} value='mypage'>마이페이지</button></li>
             </ul>
           </div>
         </div>
@@ -375,7 +372,7 @@ function App() {
                     <div className='boardTitle'>{item.title}</div>
                     <div className='boardAuthor'>{item.author}</div>
                     <div className='boardDate'>{item.date.toLocaleDateString()}</div>
-                  </li>  
+                  </li>
                 ))}
               </ul>
             </div>
@@ -452,7 +449,7 @@ function App() {
                     <div>제목: {content.title}</div>
                     <div>설명: {content.description}</div>
                     <div>정답: <textarea></textarea></div>
-                    
+
                     <div
                       className={`Answer ${isAnswerShown[index] ? 'clicked' : ''}`}
                       onClick={() => answerClick(index)}
