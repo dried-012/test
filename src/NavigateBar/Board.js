@@ -1,9 +1,11 @@
-import react from "react";
+import React from "react";
 
 function Board(){
     
 
-    return{
-
-    }
+    return(
+        <div>local//Board</div>
+    );
 }
+
+export default Board;

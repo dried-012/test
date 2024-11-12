@@ -1,7 +1,6 @@
 import './App.css';
 import './css/Board.css';
 import React from 'react';
-import myPage from './NavigateBar/Board';
 import { db,_apiKey } from './firebase';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom'
@@ -178,8 +177,7 @@ function App() {
     e.preventDefault();
     switch(e.target.value){
       case "mypage":
-        alert("aa");
-        navigate('/myPage');
+        navigate('/mypage');
       break;
     }
   }
@@ -238,7 +236,7 @@ function App() {
               <li><a>게시판</a></li>
               <li><a>문제풀기</a></li>
               <li><a>About</a></li>
-              <li><a href='/NavigateBar/Board'>마이페이지</a></li>
+              <li><button onClick={pageUp} value='mypage'>마이페이지</button></li>
             </ul>
           </div>
         </div>
