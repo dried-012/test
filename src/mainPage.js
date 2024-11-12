@@ -183,6 +183,7 @@ function App() {
     switch(e.target.value){
       case "mypage":
         navigate('/mypage');
+        break;
       case "mytest":
         navigate('/mytest');
       break;
