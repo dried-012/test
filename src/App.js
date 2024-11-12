@@ -135,7 +135,7 @@ function App() {
       console.log(error.message);
     }
   }
-
+  
   const logout = async (e) =>{
     try {
       const auth = getAuth();
@@ -175,6 +175,7 @@ function App() {
 
   const testButtonClick = (e) => {
     e.preventDefault();
+    const value = e.target.value;
     const range = e.target.getAttribute("data-range");
     setIsAnswerShown([]);
     testAct(value, range);
