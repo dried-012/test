@@ -2,10 +2,9 @@ import './App.css';
 import './css/Board.css';
 import React from 'react';
 import myPage from './NavigateBar/Board';
-import MainPage from "./mainPage"
 import { db,_apiKey } from './firebase';
 import { useEffect, useState } from 'react';
-import { Routes, Route, Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { doc, collection, getDoc, getDocs, setDoc, updateDoc, getFirestore, Timestamp } from 'firebase/firestore';
 import { getAuth,signInWithEmailAndPassword,createUserWithEmailAndPassword,signOut, setPersistence, browserSessionPersistence, onAuthStateChanged } from 'firebase/auth';
 
@@ -227,11 +226,155 @@ function App() {
   }, [testSubject]);
 
   return (
-    <div>
-      <Routes>
-        <Route path="/" element={<MainPage/>}/>
-      </Routes>
+
+    <div className='container'>
+      <div className='app'>
+        <div className='header'>
+          <span>
+            <h1>quiz test</h1>
+          </span>
+          <div id="navigateDiv">
+            <ul className="navigateBar">
+              <li><a>게시판</a></li>
+              <li><a>문제풀기</a></li>
+              <li><a>About</a></li>
+              <li><a href='/NavigateBar/Board'>마이페이지</a></li>
+            </ul>
+          </div>
+        </div>
+
+        <div className='content'>
+        <div id="loginDiv">
+          {uData == undefined && !isSignin && !isLogined &&
+          <form onSubmit={login}>
+            <div>
+              <input
+              type="email"
+              value={email}
+              onChange={(e)=>setEmail(e.target.value)}
+              required
+              placeholder="email@xxxxx.com"
+            />
+            </div>
+            <div>
+            <input
+                type="password"
+                value={password}
+                onChange={(e)=>setPassword(e.target.value)}
+                required
+                placeholder="비밀번호"
+              />
+            </div>
+              <button type="submit">login</button>
+              <button onClick={handleClick}>signup</button>
+          </form>
+          || isLogined &&
+          <div>
+            {uData}
+            <br></br>
+            <button onClick={logout}>logout</button>
+          </div>
+          || !isLogined &&
+          <form onSubmit={userjoin}>
+            <div>
+              <input
+                type="email"
+                value={email}
+                onChange={(e)=>setEmail(e.target.value)}
+                required
+                placeholder="email@xxxxx.com"
+              />
+            </div>
+              <div><input
+                type="password"
+                value={password}
+                onChange={(e)=>setPassword(e.target.value)}
+                required
+                placeholder="비밀번호"
+              />
+              </div>
+              <div><input
+                type="password"
+                id="checkPass"
+                placeholder="비밀번호확인"
+              />
+              </div>
+              <button type="submit">dbins</button>
+              <button onClick={handleClick}>back</button>
+          </form>
+        }
+          </div>
+          <div className='boardDiv'>
+            <div className='boardTopDiv'>
+              <div id='boardHead'><h2>공지사항</h2></div>
+              <ul>
+                <li>
+                  <div className='boardNo'>NO</div>
+                  <div className='boardTitle'>제목</div>
+                  <div className='boardAuthor'>작성자</div>
+                  <div className='boardDate'>작성일</div>
+                </li>
+              </ul>
+            </div>
+            <div className='boardBodyDiv'>
+              <ul>
+                {boardData.length > 0 &&
+                 boardData.map((item, idx)=>(
+                  <li key={idx}>
+                    <div className='boardNo'>{idx+1}</div>
+                    <div className='boardTitle'>{item.title}</div>
+                    <div className='boardAuthor'>{item.author}</div>
+                    <div className='boardDate'>{item.date.toLocaleDateString()}</div>
+                  </li>  
+                ))}
+              </ul>
+            </div>
+          </div>
+          <p><span> </span></p>{/*몇번 문제 출력*/}
+          <h1> </h1> {/*문제 내용 출력*/}
+          <div> {/*db 불러옴*/}
+            {test !== undefined &&
+            <div>{test.uid}</div>}
+
+            <div>{uData}</div>
+
+          </div>
+          <div id="selectTestDiv">
+            <button onClick={testButtonClick} value="EIP_PT_2021_3" data-range="20">정보처리기사 실기시험 2021년 3회</button>
+            <button onClick={testButtonClick} value="EIP_PT_2022_1" data-range="20">정보처리기사 실기시험 2022년 1회</button>
+          </div>
+          <div>
+            {testContent.length > 0 &&
+              testContent.map((content, index) => (
+                <div className="QuestionForm" key={index}>
+                  <div>문제 {content.num}번</div>
+                  <div>제목: {content.title}</div>
+                  <div>설명: {content.description}</div>
+                  <div>정답: <textarea></textarea></div>
+                  
+                  <div
+                    className={`Answer ${isAnswerShown[index] ? 'clicked' : ''}`}
+                    onClick={() => answerClick(index)}
+                  >
+                    {!isAnswerShown[index] && (
+                      <div className="AnswerCover">
+                        <span className="AnswerClicker">정답 보기 (클릭)</span>
+                      </div>
+                    )}
+                    <div className={`AnswerFadeIn ${isAnswerShown[index] ? 'visible' : ''}`}>
+                      <span className="AnswerText">
+                        {content.answer}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              ))}
+          </div>
+        </div>
+      </div>
+
     </div>
+
   );
 }
 

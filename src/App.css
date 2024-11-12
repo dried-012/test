@@ -44,26 +44,28 @@
   float: right;
   border: 1px solid red;
   text-align: center;
+  
 }
 .content{
-  margin-top: 150px;
+  margin-top: 50px;
 }
 #navigateDiv{
-  width: auto;
-  height: 100px;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   padding-left: 0;
+  background-color: #376635;
 }
 .navigateBar{
-  width: 780px;
+  width: 1080px;
   list-style: none;
   padding-left: 0;
+  color: white;
+  text-align: center;
 }
 .navigateBar li{
   padding: 18px 10px;
-  width: 160px;
+  width: 23%;
   text-align: center;
   float: left;
 }

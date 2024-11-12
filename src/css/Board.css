@@ -1,4 +1,35 @@
+#boardHead{
+  padding-left: 30px;
+}
+.boardDiv{
+  width:728px;
+  height: 200px;
+}
 .boardDiv ul{
-    list-style: none;
-    padding-left: 30px;
-  }
+  list-style: none;
+  padding-left: 30px;
+  margin: 0;
+  width: 690px;
+}
+.boardDiv ul li{
+  display: flex;
+  text-align: center;
+  border-bottom: 1px solid grey;
+  height: 20px;
+}
+.boardNo{
+  padding: 0 10px;
+  width: 50px;
+}
+.boardTitle{
+  padding: 0 10px;
+  width: 330px;
+}
+.boardAuthor{
+  padding: 0 10px;
+  width: 130px;
+}
+.boardDate{
+  padding: 0 10px;
+  width: 80px;
+}
