@@ -36,26 +36,6 @@ function App() {
     }
   }
 
-  async function importTest() {
-    const contentArray = [];
-    for (let index = 1; index <= testRange; index++) {
-        var strIndex = (index).toString();
-        const docRef = doc(db, testSubject, strIndex);
-      try{
-        const docSnap = await getDoc(docRef);
-        if (docSnap.exists()) {
-          contentArray.push(docSnap.data());
-        } else {
-          console.error("No such Document");
-        }
-      } catch (error) {
-        console.error("Error getting doc",error);
-      }
-
-    }
-    setTestContent(contentArray);
-  }
-
   const userjoin = async (e) =>{
     e.preventDefault();
     if(document.getElementById("checkPass").value == password){
@@ -175,7 +155,6 @@ function App() {
   useEffect(() => {
     console.log(db);
     try {
-      getTest();
       getBoard();
       const unsubcribe = onAuthStateChanged(auth,(user)=>{
         if(user){
@@ -185,7 +164,6 @@ function App() {
           setisLogined(false);
         }
       });
-
       return unsubcribe;
     } catch (error) {
       console.log(error);
@@ -266,8 +244,8 @@ function App() {
                 placeholder="비밀번호확인"
               />
               </div>
-              <button type="submit">dbins</button>
-              <button onClick={handleClick}>back</button>
+              <button type="submit">회원가입</button>
+              <button onClick={handleClick}>돌아가기</button>
           </form>
         }
           </div>
@@ -303,7 +281,7 @@ function App() {
             {test !== undefined &&
             <div>{test.uid}</div>}
 
-            <div>{uData}</div>
+            <div>{uData !== undefined && uData}</div>
           </div>
         </div>
       </div>
