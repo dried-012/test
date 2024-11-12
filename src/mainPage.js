@@ -156,26 +156,11 @@ function App() {
       setisSignin(false);
   };
 
-  const answerClick = (index) => {
-    setIsAnswerShown((prev) => {
-      const updatedAnswers = [...prev];
-      updatedAnswers[index] = true; // 해당 인덱스만 true로 설정
-      return updatedAnswers;
-    });
-  };
-
   const insBtnClick = (e) =>{
     e.preventDefault();
       userAdd({
         uid:inputid,
         upass:inputpwd});
-  }
-
-  const testButtonClick = (e) => {
-    e.preventDefault();
-    const range = e.target.getAttribute("data-range");
-    setIsAnswerShown([]);
-    testAct(value, range);
   }
 
   const pageUp = (e) => {
@@ -189,64 +174,6 @@ function App() {
       break;
     }
   }
-
-  async function testAct(select, range) {
-    switch(select){
-      case "EIP_PT_2021_3":
-        setTestSubject("eIP_pT_2021_3");
-        break;
-      case "EIP_PT_2022_1":
-        setTestSubject("engineerInformationProcessing_pT_2022_1");
-        break;
-      default:
-        break;
-    }
-    setTestRange(Number(range));
-  }
-
-  const testListButtonClick = async (e) => {
-    e.preventDefault();
-    const collectionName = e.target.value;
-    const testTitle = e.target.getAttribute("data-title");
-
-    setSelectedTestName(testTitle);
-    setSelectedCollectionName(collectionName);
-    const collectionRef = collection(db, collectionName);
-    try {
-      const querySnapshot = await getDocs(collectionRef);
-      const docNames = querySnapshot.docs.map(doc => doc.id);
-      setTestList(docNames);
-    } catch (error) {
-      console.error("Error fetching documents:", error);
-    }
-  };
-
-  const formatDocName = (docName) => {
-    const [year, round] = docName.split('_');
-    return `${selectedTestName.split(' ')[0]} ${year}년 ${round}회 ${selectedTestName.split(' ')[1]}`;
-  };
-
-  const toggleAnswer = (questionKey) => {
-    setAnswerVisible(prev => ({
-      ...prev,
-      [questionKey]: !prev[questionKey]
-    }));
-  };
-
-  const handleDocClick = async (docId) => {
-    const docRef = doc(db, selectedCollectionName, docId);
-    try {
-      const docSnap = await getDoc(docRef);
-      if (docSnap.exists()) {
-        const data = docSnap.data();
-        setSelectedDocContent(data); // 전체 데이터를 상태에 저장
-      } else {
-        console.error("Document does not exist!");
-      }
-    } catch (error) {
-      console.error("Error fetching document:", error);
-    }
-  };
 
   //최초 마운트 시 getTest import
   useEffect(() => {
@@ -263,17 +190,11 @@ function App() {
         }
       });
 
-      if (testSubject) {
-        // alert(testSubject);
-        importTest();
-        setTestSubject("");
-      }
-
       return unsubcribe;
     } catch (error) {
       console.log(error);
     }
-  }, [testSubject]);
+  },);
 
   return (
 
@@ -388,91 +309,6 @@ function App() {
 
             <div>{uData}</div>
           </div>
-          <div>
-            <div>
-              <button onClick={testListButtonClick} value="eIP_pT" data-title="정보처리기사 실기">
-                정보처리기사 실기
-              </button>
-            </div>
-            <div>
-              {testList.map((docName, index) => (
-                <button key={index} onClick={() => handleDocClick(docName)} value={docName}>
-                  {formatDocName(docName)}
-                </button>
-              ))}
-            </div>
-            <div>
-              {selectedDocContent && (
-                <div>
-                  {Object.keys(selectedDocContent).map((key) => {
-                    const field = selectedDocContent[key];
-                    const isVisible = answerVisible[key]; // 각 문제별 정답 표시 상태
-
-                    return (
-                      <div key={key} className="question-block">
-                        <div><h2>문제 {field.num}</h2></div>
-                        <div>
-                          <p>제목: {field.title}</p>
-                          <p>설명: {field.description}</p>
-                        </div>
-                        <div><p>입력: <textarea></textarea></p></div>
-                        <div>
-                          <div>
-                            <div onClick={() => toggleAnswer(key)}>
-                              {!isVisible && (
-                                <span className="AnswerClicker">정답 및 해설 보기 (클릭)</span>
-                              )}
-                              {isVisible && (
-                                <div>
-                                  <p>정답: {field.answer}</p>
-                                  <p>해설: {field.explanation}</p>
-                                </div>
-                              )}
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              )}
-            </div>
-          </div>
-          {/*
-          <div>
-            <div id="selectTestDiv">
-              <button onClick={testButtonClick} value="EIP_PT_2021_3" data-range="20">정보처리기사 실기시험 2021년 3회</button>
-              <button onClick={testButtonClick} value="EIP_PT_2022_1" data-range="20">정보처리기사 실기시험 2022년 1회</button>
-            </div>
-            <div>
-              {testContent.length > 0 &&
-                testContent.map((content, index) => (
-                  <div className="QuestionForm" key={index}>
-                    <div>문제 {content.num}번</div>
-                    <div>제목: {content.title}</div>
-                    <div>설명: {content.description}</div>
-                    <div>정답: <textarea></textarea></div>
-
-                    <div
-                      className={`Answer ${isAnswerShown[index] ? 'clicked' : ''}`}
-                      onClick={() => answerClick(index)}
-                    >
-                      {!isAnswerShown[index] && (
-                        <div className="AnswerCover">
-                          <span className="AnswerClicker">정답 보기 (클릭)</span>
-                        </div>
-                      )}
-                      <div className={`AnswerFadeIn ${isAnswerShown[index] ? 'visible' : ''}`}>
-                        <span className="AnswerText">
-                          {content.answer}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-            </div>
-          </div>
-          */}
         </div>
       </div>
 
