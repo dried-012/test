@@ -183,6 +183,8 @@ function App() {
     switch(e.target.value){
       case "mypage":
         navigate('/mypage');
+      case "mytest":
+        navigate('/mytest');
       break;
     }
   }
@@ -283,7 +285,7 @@ function App() {
           <div id="navigateDiv">
             <ul className="navigateBar">
               <li><a>게시판</a></li>
-              <li><a href='/NavigateBar/Test'>문제풀기</a></li>
+              <li><button onClick={pageUp} value='mytest'>문제풀기</button></li>
               <li><a>About</a></li>
               <li><button onClick={pageUp} value='mypage'>마이페이지</button></li>
             </ul>
