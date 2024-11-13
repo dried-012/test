@@ -57,6 +57,9 @@ function Test(){
         <div>
             <div>
                 <div>
+                    <button onClick={testListButtonClick} value="eIP_wT" data-title="정보처리기사 필기">
+                        정보처리기사 필기
+                    </button>
                     <button onClick={testListButtonClick} value="eIP_pT" data-title="정보처리기사 실기">
                         정보처리기사 실기
                     </button>
