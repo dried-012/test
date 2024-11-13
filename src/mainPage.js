@@ -3,7 +3,7 @@ import './css/Board.css';
 import React from 'react';
 import { db } from './firebase';
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom';
 import { doc, collection, getDoc, getDocs, setDoc, updateDoc, Timestamp } from 'firebase/firestore';
 import { getAuth,signInWithEmailAndPassword,createUserWithEmailAndPassword, signOut, setPersistence, browserSessionPersistence, onAuthStateChanged } from 'firebase/auth';
 
@@ -59,15 +59,19 @@ function App() {
   async function getBoard() {
     const dataArray = [];
     const collRef = collection(db,"board");
-    const getDbContent = await getDocs(collRef);
-    getDbContent.forEach((doc) => {
-      const docData = doc.data();
-      if(docData.date && docData.date instanceof Timestamp){
-        docData.date = docData.date.toDate();
-      }
-      dataArray.push(docData);
-    });
-    setBoardData(dataArray);
+    try {
+      const getDbContent = await getDocs(collRef);
+      getDbContent.forEach((doc) => {
+        const docData = doc.data();
+        if(docData.date && docData.date instanceof Timestamp){
+          docData.date = docData.date.toDate();
+        }
+        dataArray.push(docData); 
+      });
+      setBoardData(dataArray);
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   async function userAdd(data) {
@@ -101,7 +105,6 @@ function App() {
           navigate('/');
         });
       });
-
     } catch (error) {
       console.log(error.message);
     }
@@ -116,10 +119,9 @@ function App() {
       }).catch((error)=>{
         console.log(error.message);
       });
-    } catch (error) {
+    } catch {
 
     }
-
   };
 
   const handleClick = (e) => {
@@ -141,13 +143,16 @@ function App() {
     switch(e.target.value){
       case "mypage":
         navigate('/mypage');
-        break;
+      break;
       case "mytest":
         navigate('/mytest');
       break;
       case "board":
         navigate('/board');
-        break;
+      break;
+      case "about":
+        navigate('/about');
+      break;
     }
   }
 
@@ -168,7 +173,7 @@ function App() {
     } catch (error) {
       console.log(error);
     }
-  },);
+  },[]);
 
   return (
 
@@ -182,7 +187,7 @@ function App() {
             <ul className="navigateBar">
               <li><button onClick={pageUp} value='board'>게시판</button></li>
               <li><button onClick={pageUp} value='mytest'>문제풀기</button></li>
-              <li><button>About</button></li>
+              <li><button onClick={pageUp} value="about">About</button></li>
               <li><button onClick={pageUp} value='mypage'>마이페이지</button></li>
             </ul>
           </div>
@@ -263,7 +268,7 @@ function App() {
             </div>
             <div className='boardBodyDiv'>
               <ul>
-                {boardData.length > 0 &&
+                {boardData.length > 0 && boardData.length <= 5&&
                  boardData.map((item, idx)=>(
                   <li key={idx}>
                     <div className='boardNo'>{idx+1}</div>
