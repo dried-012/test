@@ -1,11 +1,11 @@
 import './App.css';
 import './css/Board.css';
 import React from 'react';
-import { db,_apiKey } from './firebase';
+import { db } from './firebase';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom'
-import { doc, collection, getDoc, getDocs, setDoc, updateDoc, getFirestore, Timestamp } from 'firebase/firestore';
-import { getAuth,signInWithEmailAndPassword,createUserWithEmailAndPassword,signOut, setPersistence, browserSessionPersistence, onAuthStateChanged } from 'firebase/auth';
+import { doc, collection, getDoc, getDocs, setDoc, updateDoc, Timestamp } from 'firebase/firestore';
+import { getAuth,signInWithEmailAndPassword,createUserWithEmailAndPassword, signOut, setPersistence, browserSessionPersistence, onAuthStateChanged } from 'firebase/auth';
 
 import './TestContent.css'
 
@@ -20,16 +20,7 @@ function App() {
   const navigate = useNavigate();
   const [isSignin, setisSignin] = useState(false);
   const [isLogined,setisLogined] = useState(false);
-  const [testSubject, setTestSubject] = useState("");
-  const [testContent, setTestContent] = useState([]);
-  const [testRange, setTestRange] = useState(20);
   const [boardData,setBoardData] = useState([]);
-  const [isAnswerShown, setIsAnswerShown] = useState([]);
-  const [testList, setTestList] = useState([]);
-  const [selectedTestName, setSelectedTestName] = useState("");
-  const [selectedCollectionName, setSelectedCollectionName] = useState("");
-  const [selectedDocContent, setSelectedDocContent] = useState(null);
-  const [answerVisible, setAnswerVisible] = useState({});
 
   async function getTest() {
     const docRef = doc(db,"item","userid");
@@ -43,26 +34,6 @@ function App() {
     } catch (error) {
       console.error("Error getting doc",error);
     }
-  }
-
-  async function importTest() {
-    const contentArray = [];
-    for (let index = 1; index <= testRange; index++) {
-        var strIndex = (index).toString();
-        const docRef = doc(db, testSubject, strIndex);
-      try{
-        const docSnap = await getDoc(docRef);
-        if (docSnap.exists()) {
-          contentArray.push(docSnap.data());
-        } else {
-          console.error("No such Document");
-        }
-      } catch (error) {
-        console.error("Error getting doc",error);
-      }
-
-    }
-    setTestContent(contentArray);
   }
 
   const userjoin = async (e) =>{
@@ -84,7 +55,7 @@ function App() {
     }
 
   }
-  
+
   async function getBoard() {
     const dataArray = [];
     const collRef = collection(db,"board");
@@ -174,6 +145,9 @@ function App() {
       case "mytest":
         navigate('/mytest');
       break;
+      case "board":
+        navigate('/board');
+        break;
     }
   }
 
@@ -181,7 +155,6 @@ function App() {
   useEffect(() => {
     console.log(db);
     try {
-      getTest();
       getBoard();
       const unsubcribe = onAuthStateChanged(auth,(user)=>{
         if(user){
@@ -191,7 +164,6 @@ function App() {
           setisLogined(false);
         }
       });
-
       return unsubcribe;
     } catch (error) {
       console.log(error);
@@ -208,9 +180,9 @@ function App() {
           </span>
           <div id="navigateDiv">
             <ul className="navigateBar">
-              <li><a>게시판</a></li>
+              <li><button onClick={pageUp} value='board'>게시판</button></li>
               <li><button onClick={pageUp} value='mytest'>문제풀기</button></li>
-              <li><a>About</a></li>
+              <li><button>About</button></li>
               <li><button onClick={pageUp} value='mypage'>마이페이지</button></li>
             </ul>
           </div>
@@ -272,8 +244,8 @@ function App() {
                 placeholder="비밀번호확인"
               />
               </div>
-              <button type="submit">dbins</button>
-              <button onClick={handleClick}>back</button>
+              <button type="submit">회원가입</button>
+              <button onClick={handleClick}>돌아가기</button>
           </form>
         }
           </div>
@@ -306,10 +278,6 @@ function App() {
           <p><span> </span></p>{/*몇번 문제 출력*/}
           <h1> </h1> {/*문제 내용 출력*/}
           <div> {/*db 불러옴*/}
-            {test !== undefined &&
-            <div>{test.uid}</div>}
-
-            <div>{uData}</div>
           </div>
         </div>
       </div>
