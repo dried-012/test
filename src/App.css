@@ -44,7 +44,12 @@
   float: right;
   border: 1px solid red;
   text-align: center;
-  
+  line-height: 40px;
+}
+#dataDiv {
+  display: flex;
+  width: 100%;
+  height: 50%;
 }
 .content{
   margin-top: 50px;
@@ -58,14 +63,14 @@
   margin: 0 auto;
 }
 .navigateBar{
-  width: 1080px;
+  width: 100%;
   list-style: none;
   padding-left: 0;
   text-align: center;
   margin: 0 auto;
 }
 .navigateBar li{
-  width: 23%;
+  width: 24%;
   text-align: center;
   float: left;
   height: 80px;

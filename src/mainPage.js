@@ -53,7 +53,6 @@ function App() {
     }else{
       alert("비밀번호가 다릅니다");
     }
-
   }
 
   async function getBoard() {
@@ -101,7 +100,10 @@ function App() {
           setisLogined(true);
           console.log(result);
           const user = result.user;
-          setuData(user.uid);
+          setuData({
+            uid:user.uid,
+            email:user.email
+          });
           navigate('/');
         });
       });
@@ -155,7 +157,9 @@ function App() {
       break;
     }
   }
-
+  const boardClicked = (item) =>{
+    //alert(item);
+  }
   //최초 마운트 시 getTest import
   useEffect(() => {
     console.log(db);
@@ -164,7 +168,10 @@ function App() {
       const unsubcribe = onAuthStateChanged(auth,(user)=>{
         if(user){
           setisLogined(true);
-          setuData(user.uid);
+          setuData({
+            uid:user.uid,
+            email:user.email
+          });
         }else{
           setisLogined(false);
         }
@@ -220,9 +227,8 @@ function App() {
           </form>
           || isLogined &&
           <div>
-            {uData}
-            <br></br>
-            <button onClick={logout}>logout</button>
+            {uData.email}
+            <div><button onClick={logout}>logout</button></div>
           </div>
           || !isLogined &&
           <form onSubmit={userjoin}>
@@ -272,8 +278,8 @@ function App() {
                  boardData.map((item, idx)=>(
                   <li key={idx}>
                     <div className='boardNo'>{idx+1}</div>
-                    <div className='boardTitle'>{item.title}</div>
-                    <div className='boardAuthor'>{item.author}</div>
+                    <div className='boardTitle' onClick={()=>boardClicked(item)}>{item.title}</div>
+                    <div className='boardAuthor'>{item.author.split('@')[0]}</div>
                     <div className='boardDate'>{item.date.toLocaleDateString()}</div>
                   </li>
                 ))}

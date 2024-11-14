@@ -1,3 +1,6 @@
+#header{
+  padding-bottom: 20px;
+}
 #boardHead{
   padding-left: 30px;
 }
@@ -14,22 +17,37 @@
 .boardDiv ul li{
   display: flex;
   text-align: center;
+  line-height: 30px;
   border-bottom: 1px solid grey;
-  height: 20px;
+  height: 30px;
 }
 .boardNo{
-  padding: 0 10px;
-  width: 50px;
+  width: 10%;
 }
 .boardTitle{
-  padding: 0 10px;
-  width: 330px;
+  width: 60%;
 }
 .boardAuthor{
-  padding: 0 10px;
-  width: 130px;
+  width: 10%;
 }
 .boardDate{
-  padding: 0 10px;
-  width: 80px;
+  width: 20%;
+}
+.boardWrDiv{
+  height: 80%;
+}
+.boardWrDiv input{
+  width: 100%;
+  height: 100%;
+}
+.boardWrDiv textarea{
+  width: 100%;
+  height: 100%;
+}
+.titleDiv{
+  width: 40%;
+}
+.subjectDiv{
+  width: 80%;
+  height: 500px;
 }
