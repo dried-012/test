@@ -51,6 +51,16 @@
     height: 100%;
 }
 
+#testMainSelectDiv {
+    border: 1px solid tan;
+    height: 100px;
+}
+
+#testMainFooterDiv {
+    border: 1px solid coral;
+    height: 100px;
+}
+
 #testMainListButtonDiv {
     border: 1px solid cyan;
 }
@@ -67,11 +77,16 @@
     border: 1px solid magenta;
 }
 
-#testMainContentQuestionUpdateDiv {
-    border: 1px solid black;
+#testMainSelectPreDiv {
+    border: 1px solid tomato;
+}
+
+#testMainFooterFinishDiv {
+    border: 1px solid turquoise;
 }
 
 #testMainContentQuestionUpdateDiv {
+    border: 1px solid black;
     height: 100%;
 }
 

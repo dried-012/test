@@ -146,9 +146,6 @@ function Test(){
                                         </div>
                                     </div>
                                 </div>
-                                <div>
-                                  <form>맞췄다면<input type="radio" name="OX" value="O"></input>틀렸다면<input type="radio" name="OX" value="X"></input></form>
-                                </div>
                             </div>
                           );
                          })}
@@ -156,6 +153,26 @@ function Test(){
                         )}
                       </div>
 
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div id="testMainSelectDiv">
+                <div id="testMainSelectDivInside" className="Inside">
+                  <div id="testMainSelectPreDiv" className="TestWidth">
+                    <div id="testMainSelectPreDivInside" className="Inside">
+                      
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div id="testMainFooterDiv">
+                <div id="testMainFooterDivInside" className="Inside">
+                  <div id="testMainFooterFinishDiv" className="TestWidth">
+                    <div id="testMainFooterFinishDivInside" className="Inside">
+                      
                     </div>
                   </div>
                 </div>
