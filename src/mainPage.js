@@ -65,7 +65,7 @@ function App() {
         if(docData.date && docData.date instanceof Timestamp){
           docData.date = docData.date.toDate();
         }
-        dataArray.push(docData); 
+        dataArray.push({id:doc.id,...docData});//docData ...데이터풀기
       });
       setBoardData(dataArray);
     } catch (error) {
@@ -158,9 +158,9 @@ function App() {
     }
   }
   const boardClicked = (item) =>{
-    //alert(item);
+    alert(item.id);
   }
-  //최초 마운트 시 getTest import
+  //최초 마운트 시 getBoard import
   useEffect(() => {
     console.log(db);
     try {
@@ -181,7 +181,7 @@ function App() {
       console.log(error);
     }
   },[]);
-
+  
   return (
 
     <div className='container'>
@@ -276,11 +276,11 @@ function App() {
               <ul>
                 {boardData.length > 0 && boardData.length <= 5&&
                  boardData.map((item, idx)=>(
-                  <li key={idx}>
+                  <li key={item.id}>
                     <div className='boardNo'>{idx+1}</div>
                     <div className='boardTitle' onClick={()=>boardClicked(item)}>{item.title}</div>
-                    <div className='boardAuthor'>{item.author.split('@')[0]}</div>
-                    <div className='boardDate'>{item.date.toLocaleDateString()}</div>
+                    <div className='boardAuthor'>{item.author?item.author.split('@')[0]:'Unknown Author'}</div>
+                    <div className='boardDate'>{item.date?item.date.toLocaleDateString(): 'Unknown Date'}</div>
                   </li>
                 ))}
               </ul>
