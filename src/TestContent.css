@@ -1,41 +1,82 @@
-.Answer {
-    position: relative;
-    display: inline-block;
-    width: 250px;
-    height: 50px;
-    cursor: pointer;
+.Inside {
+    width: 100%;
+    height: 100%;
 }
 
-.Answer.clicked {
-    cursor: default;
+.TestWidth {
+    margin-top: 0px;
+    margin-right: auto;
+    margin-bottom: 0px;
+    margin-left: auto;
+    width: 80%;
+    height: 100%;
 }
 
-.AnswerCover {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: aquamarine;
-    z-index: 1;
+.testNum {
+    font-size: 25px;
+}
+
+.testInsert {
+    font-size: 20px;
+}
+
+.question-block {
+    width: calc(50% - 10px);
+    box-sizing: border-box;
+}
+
+
+#testMainDiv {
+    border: 1px solid black;
+    width: 100%;
+}
+
+#testMainListDiv {
+    border: 1px solid red;
+    height: 100px;
+}
+
+#testMainTitleDiv {
+    border: 1px solid green;
+    height: 100px;
+}
+
+#testMainSubjectDiv {
+    border: 1px solid yellow;
+    height: 100px;
+}
+
+#testMainContentDiv {
+    border: 1px solid blue;
+    height: 100%;
+}
+
+#testMainListButtonDiv {
+    border: 1px solid cyan;
+}
+
+#testMainTitleOnDiv {
+    border: 1px solid purple;
+}
+
+#testMainSubjectSetDiv {
+    border: 1px solid teal;
+}
+
+#testMainContentQuestionDiv {
+    border: 1px solid magenta;
+}
+
+#testMainContentQuestionUpdateDiv {
+    border: 1px solid black;
+}
+
+#testMainContentQuestionUpdateDiv {
+    height: 100%;
+}
+
+#question-block-pack {
     display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.AnswerClicker {
-    background-color: aqua;
-}
-
-.AnswerFadeIn {
-    position: relative;
-    z-index: 2;
-}
-
-.AnswerText {
-    opacity: 0;
-}
-
-.AnswerFadeIn.visible .AnswerText {
-    opacity: 1;
+    flex-wrap: wrap;
+    gap: 10px;
 }
