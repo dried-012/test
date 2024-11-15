@@ -2,7 +2,7 @@ import React from "react";
 import '../css/Board.css';
 import { db,_apiKey } from '../firebase';
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { doc, collection, getDoc, getDocs, setDoc, updateDoc, getFirestore, Timestamp, addDoc } from 'firebase/firestore';
 import { getAuth,signInWithEmailAndPassword,createUserWithEmailAndPassword, signOut, setPersistence, browserSessionPersistence, onAuthStateChanged } from 'firebase/auth';
 
@@ -20,6 +20,7 @@ function Board(){
   const [title,setTitle] = useState('');
   const [subject,setSubject] = useState('');
   const [file,setFile] = useState(null);
+  const [boardCon,setBoardCon] = useState(false);
 
     async function getBoard() {
         const dataArray = [];
@@ -86,7 +87,7 @@ function Board(){
           if(docData.date && docData.date instanceof Timestamp){
             docData.date = docData.date.toDate();
           }
-          dataArray.push(docData); 
+          dataArray.push({id:doc.id,...docData}); 
         });
         setBoardData(dataArray);
       } catch (error) {
@@ -181,12 +182,27 @@ function Board(){
       else
         setisSignin(false);
     };
+
     const handleFileChange = (e) => {
       const selectedFile = e.target.files[0];
       if (selectedFile) {
         setFile(selectedFile);
       }
     }
+
+    const boardConBtn = (e) => {
+      if(!boardCon)
+        setBoardCon(true);
+      else
+        setBoardCon(false);
+    }
+
+    const boardClicked = (item) =>{
+      navigate('/boardRead',{state:{
+        item
+      }});
+    }
+    
     useEffect(() => {
         try {
             getBoard();
@@ -299,9 +315,9 @@ function Board(){
               <ul>
                 {boardData.length > 0 &&
                  boardData.map((item, idx)=>(
-                  <li key={idx}>
+                  <li key={item.id}>
                     <div className='boardNo'>{idx+1}</div>
-                    <div className='boardTitle'>{item.title}</div>
+                    <div className='boardTitle' onClick={()=>boardClicked(item)}>{item.title}</div>
                     <div className='boardAuthor'>{item.author.split('@')[0]}</div>
                     <div className='boardDate'>{item.date.toLocaleDateString()}</div>
                   </li>  
@@ -310,7 +326,8 @@ function Board(){
             </div>
           </div>
           <div className='boardConDiv'>
-            <button>글쓰기</button>
+            <button onClick={boardConBtn}>글쓰기</button>
+            {boardCon &&
             <div className='boardWrDiv'>
               <form onSubmit={insBtnClick}>
                 <span>제목</span>
@@ -337,6 +354,7 @@ function Board(){
                 <div><button type='submit'>글입력</button></div>
               </form>
             </div>
+            }
           </div>
         </div>
     );

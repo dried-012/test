@@ -158,7 +158,9 @@ function App() {
     }
   }
   const boardClicked = (item) =>{
-    alert(item.id);
+    navigate('/boardRead',{state:{
+      item
+    }});
   }
   //최초 마운트 시 getBoard import
   useEffect(() => {

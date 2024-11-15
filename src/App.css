@@ -38,9 +38,8 @@
 }
 
 #loginDiv {
-  width:300px;
-  height: 80px;
-  padding: 20px 0;
+  width:27%;
+  height: 120px;
   float: right;
   border: 1px solid red;
   text-align: center;
