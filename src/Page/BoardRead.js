@@ -9,6 +9,7 @@ import { getAuth,signInWithEmailAndPassword,createUserWithEmailAndPassword, sign
 function BoardRead() {
     const navigate = useNavigate();
     const [boardData,setBoardData] = useState([]);
+    const [clickedBoarddData,setClickedBoardData] = useState();
     const [email, setEmail] = useState();
     const [password, setPassword] = useState();
     const auth = getAuth();
@@ -62,7 +63,22 @@ function BoardRead() {
           console.log(error);
         }
       }
-    
+
+      const readBoard = async() =>{
+      const boardRef = item.id;
+      const docRef = doc(db,"board",boardRef);
+      try {
+        const docSnap = await getDoc(docRef);
+        if(docSnap.exists){
+          setClickedBoardData(docSnap.data());
+        }else {
+          console.error("No such Document");
+        }
+      }catch(error){
+
+      }
+    };
+
     useEffect(() => {
         try {
             getBoard();
