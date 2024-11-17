@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom'
 import { doc, collection, getDoc, getDocs, setDoc, updateDoc, getFirestore, Timestamp } from 'firebase/firestore';
 import { db,_apiKey } from '../firebase';
+import DOMPurify from 'dompurify';
 function Test(){
     const navigate = useNavigate();
     const [testList, setTestList] = useState([]);
@@ -161,12 +162,12 @@ function Test(){
                               <div key={key} className="question-block">
                                 
                                 
-                                <p><span className="testNum">{field.num}</span> {field.title}</p>
-                                <p>{field.description}</p>
+                                <p><span className="testNum">{field.num}</span> <span dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(field.title) }}></span></p>
+                                <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(field.description) }}></div>
                                 
                                 <div><p><textarea className="testInsert" placeholder="답 입력"></textarea></p></div>
                                 <div>
-                                    <div>
+                                    <div className="AnswerBox">
                                         <div onClick={() => toggleAnswer(key)}>
                                         {!isVisible && (
                                             <div>
@@ -176,8 +177,8 @@ function Test(){
                                         )}
                                         {isVisible && (
                                             <div>
-                                            <p>정답: {field.answer}</p>
-                                            <p>해설: {field.explanation}</p>
+                                            <p dangerouslySetInnerHTML={{ __html: `정답: ${field.answer}` }}></p>
+                                            <p dangerouslySetInnerHTML={{ __html: `해설: ${field.explanation}` }}></p>
                                             </div>
                                         )}
                                         </div>

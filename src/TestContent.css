@@ -25,6 +25,15 @@
     box-sizing: border-box;
 }
 
+.AnswerBox {
+    
+}
+
+/*
+.AnswerBox {
+    height: 100px;
+}
+*/
 
 #testMainDiv {
     border: 1px solid black;
