@@ -5,79 +5,79 @@ import { doc, collection, getDoc, getDocs, setDoc, updateDoc, getFirestore, Time
 import { db,_apiKey } from '../firebase';
 import DOMPurify from 'dompurify';
 function Test(){
-    const navigate = useNavigate();
-    const [testList, setTestList] = useState([]);
-    const [selectedTestName, setSelectedTestName] = useState("");
-    const [selectedCollectionName, setSelectedCollectionName] = useState("");
-    const [selectedDocContent, setSelectedDocContent] = useState(null);
-    const [answerVisible, setAnswerVisible] = useState({});
+  const navigate = useNavigate();
+  const [testList, setTestList] = useState([]);
+  const [selectedTestName, setSelectedTestName] = useState("");
+  const [selectedCollectionName, setSelectedCollectionName] = useState("");
+  const [selectedDocContent, setSelectedDocContent] = useState(null);
+  const [isCoverVisible, setIsCoverVisible] = useState({});
 
-    const pageUp = (e) => {
-      e.preventDefault();
-      switch(e.target.value){
-        case "mypage":
-          navigate('/mypage');
-        break;
-        case "mytest":
-          navigate('/mytest');
-        break;
-        case "board":
-          navigate('/board');
-        break;
-        case "about":
-          navigate('/about');
-        break;
+  const pageUp = (e) => {
+    e.preventDefault();
+    switch(e.target.value){
+      case "mypage":
+        navigate('/mypage');
+      break;
+      case "mytest":
+        navigate('/mytest');
+      break;
+      case "board":
+        navigate('/board');
+      break;
+      case "about":
+        navigate('/about');
+      break;
+    }
+  }
+
+  function PageRs() {
+    navigate('/');
+  }
+
+  const testListButtonClick = async (e) => {
+    e.preventDefault();
+    const collectionName = e.target.value;
+    const testTitle = e.target.getAttribute("data-title");
+
+    setSelectedTestName(testTitle);
+    setSelectedCollectionName(collectionName);
+    const collectionRef = collection(db, collectionName);
+    try {
+      const querySnapshot = await getDocs(collectionRef);
+      const docNames = querySnapshot.docs.map(doc => doc.id);
+      setTestList(docNames);
+    } catch (error) {
+      console.error("Error fetching documents:", error);
+    }
+  };
+    
+  const formatDocName = (docName) => {
+    const [year, round] = docName.split('_');
+    return `${selectedTestName.split(' ')[0]} ${year}년 ${round}회 ${selectedTestName.split(' ')[1]}`;
+  };
+    
+  const toggleAnswerCover = (questionKey) => {
+    setIsCoverVisible((prev) => ({
+      ...prev,
+      [questionKey]: !prev[questionKey],  // 기존 상태의 반대로 토글
+    }));
+  };
+    
+  const handleDocClick = async (docId) => {
+    const docRef = doc(db, selectedCollectionName, docId);
+    try {
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
+        const data = docSnap.data();
+        setSelectedDocContent(data); // 전체 데이터를 상태에 저장
+        setAnswerVisible({});
+      } else {
+        console.error("Document does not exist!");
       }
+    } catch (error) {
+      console.error("Error fetching document:", error);
     }
-
-    function PageRs() {
-      navigate('/');
-    }
-
-    const testListButtonClick = async (e) => {
-        e.preventDefault();
-        const collectionName = e.target.value;
-        const testTitle = e.target.getAttribute("data-title");
-    
-        setSelectedTestName(testTitle);
-        setSelectedCollectionName(collectionName);
-        const collectionRef = collection(db, collectionName);
-        try {
-          const querySnapshot = await getDocs(collectionRef);
-          const docNames = querySnapshot.docs.map(doc => doc.id);
-          setTestList(docNames);
-        } catch (error) {
-          console.error("Error fetching documents:", error);
-        }
-      };
-    
-      const formatDocName = (docName) => {
-        const [year, round] = docName.split('_');
-        return `${selectedTestName.split(' ')[0]} ${year}년 ${round}회 ${selectedTestName.split(' ')[1]}`;
-      };
-    
-      const toggleAnswer = (questionKey) => {
-        setAnswerVisible(prev => ({
-          ...prev,
-          [questionKey]: !prev[questionKey]
-        }));
-      };
-    
-      const handleDocClick = async (docId) => {
-        const docRef = doc(db, selectedCollectionName, docId);
-        try {
-          const docSnap = await getDoc(docRef);
-          if (docSnap.exists()) {
-            const data = docSnap.data();
-            setSelectedDocContent(data); // 전체 데이터를 상태에 저장
-            setAnswerVisible({});
-          } else {
-            console.error("Document does not exist!");
-          }
-        } catch (error) {
-          console.error("Error fetching document:", error);
-        }
-      };
+  };
 
     return(
       
@@ -156,10 +156,13 @@ function Test(){
                         <div id="question-block-pack">
                         {Object.keys(selectedDocContent).map((key) => {
                             const field = selectedDocContent[key];
-                            const isVisible = answerVisible[key]; // 각 문제별 정답 표시 상태
+                            const isCoverVisibleForKey = isCoverVisible[key];
 
                             return (
-                              <div key={key} className="question-block">
+                              <div
+                                key={key}
+                                className="question-block"
+                              >
                                 
                                 
                                 <p><span className="testNum">{field.num}</span> <span dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(field.title) }}></span></p>
@@ -167,22 +170,18 @@ function Test(){
                                 
                                 <div><p><textarea className="testInsert" placeholder="답 입력"></textarea></p></div>
                                 <div>
-                                    <div className="AnswerBox">
-                                        <div onClick={() => toggleAnswer(key)}>
-                                        {!isVisible && (
-                                            <div>
-                                            <p><span className="AnswerClicker">정답 및 해설 보기 (클릭)</span></p>
-                                            <p><br></br></p>
-                                            </div>
-                                        )}
-                                        {isVisible && (
-                                            <div>
-                                            <p dangerouslySetInnerHTML={{ __html: `정답: ${field.answer}` }}></p>
-                                            <p dangerouslySetInnerHTML={{ __html: `해설: ${field.explanation}` }}></p>
-                                            </div>
-                                        )}
-                                        </div>
+                                  <div className="AnswerBox">
+                                    {!isCoverVisibleForKey && (
+                                      <div className="AnswerCover" onClick={() => toggleAnswerCover(key)}>
+                                        정답 및 해설 열기
+                                      </div>
+                                    )}
+                                    <div>
+                                    <p className="AnswerCoverOn" onClick={() => toggleAnswerCover(key)}>정답 및 해설 닫기</p>
+                                      <p dangerouslySetInnerHTML={{ __html: `정답: ${field.answer}` }}></p>
+                                      <p dangerouslySetInnerHTML={{ __html: `해설: ${field.explanation}` }}></p>
                                     </div>
+                                  </div>
                                 </div>
                             </div>
                           );
