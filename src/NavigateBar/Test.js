@@ -70,7 +70,7 @@ function Test(){
       if (docSnap.exists()) {
         const data = docSnap.data();
         setSelectedDocContent(data); // 전체 데이터를 상태에 저장
-        setAnswerVisible({});
+        setIsCoverVisible({});
       } else {
         console.error("Document does not exist!");
       }
