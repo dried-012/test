@@ -1,5 +1,6 @@
 import React from 'react';
 import '../css/Board.css';
+import '../css/BoardRead.css';
 import { db,_apiKey } from '../firebase';
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom'
@@ -70,7 +71,11 @@ function BoardRead() {
       try {
         const docSnap = await getDoc(docRef);
         if(docSnap.exists){
-          setClickedBoardData(docSnap.data());
+          let data = docSnap.data();
+          if(data.date && data.date instanceof Timestamp){
+            data.date = data.date.toDate();
+          }
+          setClickedBoardData(data);
         }else {
           console.error("No such Document");
         }
@@ -82,6 +87,7 @@ function BoardRead() {
     useEffect(() => {
         try {
             getBoard();
+            readBoard();
             const unsubcribe = onAuthStateChanged(auth,(user)=>{
               if(user){
                 setisLogined(true);
@@ -114,10 +120,10 @@ function BoardRead() {
               </ul>
             </div>
             <div id='contentDiv'>
-                <div className='title'></div>
-                <div className='author'></div>
-                <div className='content'></div>
-                <div className='date'></div>
+                <div className='title'><span>제목  </span>{clickedBoarddData?.title}</div>
+                <div className='author'><span>작성자 </span>{clickedBoarddData?.author.split('@')[0]}</div>
+                <div className='content'><span>내용</span><br/>{clickedBoarddData?.subject}</div>
+                <div className='date'><span>날짜</span>{clickedBoarddData?.date.toLocaleDateString()}</div>
             </div>
           </div>
         </div>
