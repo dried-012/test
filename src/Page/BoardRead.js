@@ -120,10 +120,11 @@ function BoardRead() {
               </ul>
             </div>
             <div id='contentDiv'>
-                <div className='title'><span>제목  </span>{clickedBoardData?.title}</div>
+                <h2 className='cont_subject'>공지사항</h2>
+                <div className='title'>{clickedBoardData?.title}</div>
                 <div className='author'><span>작성자 </span>{clickedBoardData?.author.split('@')[0]}</div>
-                <div className='content'><span>내용</span><br/>{clickedBoardData?.subject}</div>
                 <div className='date'><span>날짜</span>{clickedBoardData?.date.toLocaleDateString()}</div>
+                <div className='content'>{clickedBoardData?.subject}</div>
             </div>
           </div>
         </div>
