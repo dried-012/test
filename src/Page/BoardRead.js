@@ -10,7 +10,7 @@ import { getAuth,signInWithEmailAndPassword,createUserWithEmailAndPassword, sign
 function BoardRead() {
     const navigate = useNavigate();
     const [boardData,setBoardData] = useState([]);
-    const [clickedBoarddData,setClickedBoardData] = useState();
+    const [clickedBoardData,setClickedBoardData] = useState();
     const [email, setEmail] = useState();
     const [password, setPassword] = useState();
     const auth = getAuth();
@@ -120,10 +120,10 @@ function BoardRead() {
               </ul>
             </div>
             <div id='contentDiv'>
-                <div className='title'><span>제목  </span>{clickedBoarddData?.title}</div>
-                <div className='author'><span>작성자 </span>{clickedBoarddData?.author.split('@')[0]}</div>
-                <div className='content'><span>내용</span><br/>{clickedBoarddData?.subject}</div>
-                <div className='date'><span>날짜</span>{clickedBoarddData?.date.toLocaleDateString()}</div>
+                <div className='title'><span>제목  </span>{clickedBoardData?.title}</div>
+                <div className='author'><span>작성자 </span>{clickedBoardData?.author.split('@')[0]}</div>
+                <div className='content'><span>내용</span><br/>{clickedBoardData?.subject}</div>
+                <div className='date'><span>날짜</span>{clickedBoardData?.date.toLocaleDateString()}</div>
             </div>
           </div>
         </div>
