@@ -11,6 +11,9 @@ function Test(){
   const [selectedCollectionName, setSelectedCollectionName] = useState("");
   const [selectedDocContent, setSelectedDocContent] = useState(null);
   const [isCoverVisible, setIsCoverVisible] = useState({});
+  const [checkResults, setCheckResults] = useState({});
+  const [clickedTestTitle, setClickedTestTitle] = useState("");
+  const [totalQuestions, setTotalQuestions] = useState(0);
 
   const pageUp = (e) => {
     e.preventDefault();
@@ -38,7 +41,8 @@ function Test(){
     e.preventDefault();
     const collectionName = e.target.value;
     const testTitle = e.target.getAttribute("data-title");
-
+    setClickedTestTitle(null);
+    setSelectedDocContent(null);
     setSelectedTestName(testTitle);
     setSelectedCollectionName(collectionName);
     const collectionRef = collection(db, collectionName);
@@ -69,8 +73,13 @@ function Test(){
       const docSnap = await getDoc(docRef);
       if (docSnap.exists()) {
         const data = docSnap.data();
-        setSelectedDocContent(data); // 전체 데이터를 상태에 저장
+        setSelectedDocContent(data);
         setIsCoverVisible({});
+        setCheckResults({});
+        setClickedTestTitle(formatDocName(docId));
+
+        const questionCount = Object.keys(data).length;
+        setTotalQuestions(questionCount);
       } else {
         console.error("Document does not exist!");
       }
@@ -78,6 +87,28 @@ function Test(){
       console.error("Error fetching document:", error);
     }
   };
+
+  const handleCheck = (key, value) => {
+    setCheckResults((prev) => ({
+      ...prev,
+      [key]: value,
+    }));
+  };
+
+  const getTotalCount = (type) => {
+    return Object.values(checkResults).filter((result) => result === type).length;
+  };
+
+  const handleReset = () => {
+    setTestList([]);
+    setSelectedDocContent(null);
+    setIsCoverVisible({});
+    setCheckResults({});
+    setClickedTestTitle(null);
+    setSelectedTestName(null);
+  }
+
+  const isBothNull = !clickedTestTitle && !selectedTestName;
 
     return(
       
@@ -107,11 +138,15 @@ function Test(){
                   <div id="testMainListButtonDiv" className="TestWidth">
                     <div id="testMainListButtonDivInside" className="Inside">
                       <div>
+                        <button onClick={handleReset}>
+                          초기화
+                        </button>
+                        <br></br>
                         <button onClick={testListButtonClick} value="eIP_wT" data-title="정보처리기사 필기">
-                            정보처리기사 필기
+                          정보처리기사 필기
                         </button>
                         <button onClick={testListButtonClick} value="eIP_pT" data-title="정보처리기사 실기">
-                            정보처리기사 실기
+                          정보처리기사 실기
                         </button>
                       </div>
                       <div>
@@ -130,7 +165,16 @@ function Test(){
                 <div id="testMainTitleDivInside" className="Inside">
                   <div id="testMainTitleOnDiv" className="TestWidth">
                     <div id="testMainTitleOnDivInside" className="Inside">
-                      
+                      <div id="test-TitleDiv">
+                        {!isBothNull && (
+                          <h1 className="test-title">
+                            {clickedTestTitle || selectedTestName}
+                          </h1>
+                        )}
+                        {isBothNull && (
+                          <h1 className="test-title">시험을 선택하세요</h1>
+                        )}
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -164,22 +208,48 @@ function Test(){
                                 className="question-block"
                               >
                                 
-                                
                                 <p><span className="testNum">{field.num}</span> <span dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(field.title) }}></span></p>
+
                                 <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(field.description) }}></div>
-                                
+
                                 <div><p><textarea className="testInsert" placeholder="답 입력"></textarea></p></div>
                                 <div>
                                   <div className="AnswerBox">
                                     {!isCoverVisibleForKey && (
                                       <div className="AnswerCover" onClick={() => toggleAnswerCover(key)}>
-                                        정답 및 해설 열기
+                                        정답 및 해설 열기 (답 체크)
                                       </div>
                                     )}
                                     <div>
-                                    <p className="AnswerCoverOn" onClick={() => toggleAnswerCover(key)}>정답 및 해설 닫기</p>
+                                      <p className="AnswerCoverOn" onClick={() => toggleAnswerCover(key)}>정답 및 해설 닫기</p>
                                       <p dangerouslySetInnerHTML={{ __html: `정답: ${field.answer}` }}></p>
                                       <p dangerouslySetInnerHTML={{ __html: `해설: ${field.explanation}` }}></p>
+                                      <div className="check-buttons">
+                                        <button
+                                          onClick={() => handleCheck(key, "correct")}
+                                          style={{
+                                            backgroundColor: checkResults[key] === "correct" ? "lightgreen" : "",
+                                          }}
+                                        >
+                                          정답
+                                        </button>
+                                        <button
+                                          onClick={() => handleCheck(key, "wrong")}
+                                          style={{
+                                            backgroundColor: checkResults[key] === "wrong" ? "lightcoral" : "",
+                                          }}
+                                        >
+                                          오답
+                                        </button>
+                                        <button
+                                          onClick={() => handleCheck(key, null)}
+                                          style={{
+                                            backgroundColor: checkResults[key] === null ? "" : "",
+                                          }}
+                                        >
+                                          초기화
+                                        </button>
+                                      </div>
                                     </div>
                                   </div>
                                 </div>
@@ -199,7 +269,7 @@ function Test(){
                 <div id="testMainSelectDivInside" className="Inside">
                   <div id="testMainSelectPreDiv" className="TestWidth">
                     <div id="testMainSelectPreDivInside" className="Inside">
-                      
+
                     </div>
                   </div>
                 </div>
