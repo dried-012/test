@@ -1,5 +1,6 @@
 import './App.css';
 import './css/Board.css';
+import './css/content.css';
 import React from 'react';
 import { db } from './firebase';
 import { useEffect, useState } from 'react';
@@ -11,8 +12,8 @@ import './TestContent.css'
 
 function App() {
   const [test, setTest] = useState();
-  const [email, setEmail] = useState();
-  const [password, setPassword] = useState();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const auth = getAuth();
   const [uData, setuData] = useState();
   const [inputid, setInputid] = useState();
@@ -67,6 +68,11 @@ function App() {
         }
         dataArray.push({id:doc.id,...docData});//docData ...데이터풀기
       });
+      dataArray.sort((a, b) => {
+        if (a.date < b.date) return 1;
+        if (a.date > b.date) return -1;  
+        return 0;                        
+      });  
       setBoardData(dataArray);
     } catch (error) {
       console.log(error);
@@ -114,15 +120,17 @@ function App() {
 
   const logout = async (e) =>{
     try {
-      const auth = getAuth();
-      signOut(auth).then(()=>{
-        window.location.replace("/");
+      await signOut(auth).then(()=>{
+        setEmail('');
+        setPassword('');
+        setuData(undefined);
         setisLogined(false);
+        navigate('/');
       }).catch((error)=>{
         console.log(error.message);
       });
-    } catch {
-
+    } catch (error){
+      console.log(error.message);
     }
   };
 
@@ -203,6 +211,9 @@ function App() {
         </div>
 
         <div className='content'>
+        <div id='textDiv'>
+          <span>문제풀기를 선택하면 시작됩니다.</span>
+        </div>
         <div id="loginDiv">
           {uData == undefined && !isSignin && !isLogined &&
           <form onSubmit={login}>
@@ -232,7 +243,7 @@ function App() {
             {uData.email}
             <div><button onClick={logout}>logout</button></div>
           </div>
-          || !isLogined &&
+          || !isLogined && isSignin && 
           <form onSubmit={userjoin}>
             <div>
               <input
