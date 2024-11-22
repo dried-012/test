@@ -288,9 +288,11 @@ function App() {
               </ul>
             </div>
           </div>
-          <p><span> </span></p>{/*몇번 문제 출력*/}
-          <h1> </h1> {/*문제 내용 출력*/}
-          <div> {/*db 불러옴*/}
+          <div className='gridboxDiv'>
+            <div className='gridDiv'></div>
+            <div className='gridDiv'></div>
+            <div className='gridDiv'></div>
+            <div className='gridDiv'></div>
           </div>
         </div>
       </div>
