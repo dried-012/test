@@ -305,10 +305,10 @@ function App() {
             </div>
           </div>
           <div className='gridboxDiv'>
+            <div className='gridDiv'>개발도구</div>
             <div className='gridDiv'></div>
             <div className='gridDiv'></div>
-            <div className='gridDiv'></div>
-            <div className='gridDiv'>기능</div>
+            <div className='gridDiv'>기술적 구현</div>
           </div>
         </div>
         <div className='footerDiv'>

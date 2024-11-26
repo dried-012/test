@@ -40,7 +40,7 @@
 #loginDiv {
   width:27%;
   float: right;
-  border: 1px solid red;
+  border: 0.1em solid gray;
   text-align: center;
   line-height: 40px;
 }
