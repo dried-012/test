@@ -117,3 +117,11 @@
     flex-wrap: wrap;
     gap: 10px;
 }
+
+#test-TitleDiv {
+    display: flex; /* 플렉스박스를 활성화 */
+    justify-content: center; /* 가로 중앙 정렬 */
+    align-items: center; /* 세로 중앙 정렬 */
+    height: 100%; /* 부모 컨테이너 높이 */
+    text-align: center; /* 텍스트 가운데 정렬 */
+}
