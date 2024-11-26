@@ -1,3 +1,7 @@
+.content{
+    height: 60%;
+}
+
 #textDiv{
     text-align: center;
     font-size: 30px;
