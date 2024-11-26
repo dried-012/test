@@ -120,18 +120,11 @@ function BoardRead() {
               </ul>
             </div>
             <div id='contentDiv'>
-<<<<<<< Updated upstream
                 <h2 className='cont_subject'>공지사항</h2>
                 <div className='title'>{clickedBoardData?.title}</div>
                 <div className='author'><span>작성자 </span>{clickedBoardData?.author.split('@')[0]}</div>
                 <div className='date'><span>날짜</span>{clickedBoardData?.date.toLocaleDateString()}</div>
                 <div className='content'>{clickedBoardData?.subject}</div>
-=======
-                <div className='title'>{clickedBoarddData.title}</div>
-                <div className='author'></div>
-                <div className='content'></div>
-                <div className='date'></div>
->>>>>>> Stashed changes
             </div>
           </div>
         </div>

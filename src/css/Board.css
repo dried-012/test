@@ -6,7 +6,7 @@
 }
 .boardDiv{
   width:70%;
-  height: 200px;
+  padding: 5px 5px;
 }
 .boardDiv ul{
   list-style: none;
