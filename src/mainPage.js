@@ -308,11 +308,11 @@ function App() {
             <div className='gridDiv'></div>
             <div className='gridDiv'></div>
             <div className='gridDiv'></div>
-            <div className='gridDiv'></div>
+            <div className='gridDiv'>기능</div>
           </div>
         </div>
         <div className='footerDiv'>
-          <div>footer div</div>
+          <div></div>
         </div>
       </div>
 
