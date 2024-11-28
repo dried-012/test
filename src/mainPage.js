@@ -10,6 +10,7 @@ import { doc, collection, getDoc, getDocs, setDoc, updateDoc, Timestamp } from '
 import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, setPersistence, browserSessionPersistence, onAuthStateChanged } from 'firebase/auth';
 
 import './TestContent.css'
+import gitLogo from './image/git.png'
 
 function App() {
   const [test, setTest] = useState();
@@ -314,29 +315,34 @@ function App() {
               </span>
             </div>
             <div className='gridDiv'>
-              <a>project file</a>
-              <span>https://github.com/dried-012/test</span>
+              <a>project file</a><br/>
+              <span><a href='https://github.com/dried-012/test'><img id="gitlogo" src={gitLogo} alt=""/></a></span>
             </div>
             <div className='gridDiv'>
             <a>개발개요</a><br/>
               <span>
                 <a>개발기간: 2024.8.26 ~ 2024.12.5 (3개월)</a><br/>
                 <a>개발인원: 2명</a><br/>
-                <a>DB: 파이어베이스</a>
+                <a>개발계기: 자격증 공부를 위한 CBT사이트를 만들어 보고 싶었음</a>
               </span>
             </div>
             <div className='gridDiv'>
             <a>기술적 구현</a><br/>
               <span>
-                <a>프론트엔드: react,html,css</a><br/>
-                <a>백엔드: node.js</a><br/>
-                <a>DB: 파이어베이스</a>
+                <a>게시판(CRUD구현)</a><br/>
+                <a>react를 활용한 프론트엔드 구성</a><br/>
+                <a>node.js와 파이어베이스 API를 활용한 백엔드 구성</a>
               </span>
             </div>
           </div>
         </div>
         <div className='footerDiv'>
-          <div></div>
+          <div className='footerSubDiv'>
+            <span>
+              모든 문제들의 저작권은 원저작권자에게 있습니다. 본 사이트는 웹상에 공개되어 있는 문제만 모아서 보여드립니다.<br/>
+              <a>본 페이지는 상업적 목적이 아닌 개인 포트폴리오용으로 제작되었습니다.</a>
+            </span>
+          </div>
         </div>
       </div>
 

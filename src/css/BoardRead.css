@@ -14,6 +14,26 @@
     position: relative;
     padding: 5px 0 20px;
     border-bottom: 1px solid gray;
+    width: 70%;
+}
+.brBtnDiv{
+    position: absolute;
+    top: 20px;
+    right: 0;
+}
+
+.brBtnDiv span{
+    display: inline-block;
+    position: relative;
+    content: '';
+    border: 0.1px solid gray;
+    height: 20px;
+    top: 5px;
+}
+
+.brBtn{
+    border: 0;
+    background-color: transparent;
 }
 .cont_subject:before{
     content: '';
@@ -41,6 +61,7 @@
     width: 100%;
     height: 60%;
     padding-top: 20px;
+    
 }
 .date{
     width: 20%;

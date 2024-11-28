@@ -46,6 +46,14 @@ function BoardRead() {
       function PageRs() {
         navigate('/');
       }
+
+      const updateItem = (item) => {
+        navigate('/board', {
+          state: {
+            item
+          }
+        });
+      }
     
     async function getBoard() {
         const dataArray = [];
@@ -120,7 +128,13 @@ function BoardRead() {
               </ul>
             </div>
             <div id='contentDiv'>
-                <h2 className='cont_subject'>공지사항</h2>
+                <h2 className='cont_subject'>공지사항
+                  <div className='brBtnDiv'>
+                    <button className='brBtn' onClick={() => updateItem(item)}>수정하기</button>
+                    <span></span>
+                    <button className='brBtn'>삭제하기</button>
+                  </div>
+                </h2>
                 <div className='title'>{clickedBoardData?.title}</div>
                 <div className='author'><span>작성자 </span>{clickedBoardData?.author.split('@')[0]}</div>
                 <div className='date'><span>날짜</span>{clickedBoardData?.date.toLocaleDateString()}</div>

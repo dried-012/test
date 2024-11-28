@@ -8,6 +8,7 @@ import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, si
 
 function Board() {
   const navigate = useNavigate();
+  const location = useLocation();
   const [boardData, setBoardData] = useState([]);
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
@@ -21,6 +22,7 @@ function Board() {
   const [subject, setSubject] = useState('');
   const [file, setFile] = useState(null);
   const [boardCon, setBoardCon] = useState(false);
+  const {item} = location.state || {};
 
   async function getBoard() {
     const dataArray = [];
@@ -35,6 +37,17 @@ function Board() {
     });
     setBoardData(dataArray);
   }
+
+  useEffect(() => {
+    try{
+      if(item){
+        console.log(item);
+        setBoardCon(true);
+      }
+    }catch(error){
+      console.log(error);
+    }
+  },[item]);
 
   const pageUp = (e) => {
     e.preventDefault();
@@ -227,7 +240,8 @@ function Board() {
     } catch (error) {
       console.log(error);
     }
-  }, [isLogined]);
+  }, []);
+
 
   return (
     <div>
