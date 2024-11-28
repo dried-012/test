@@ -305,10 +305,33 @@ function App() {
             </div>
           </div>
           <div className='gridboxDiv'>
-            <div className='gridDiv'>개발도구</div>
-            <div className='gridDiv'></div>
-            <div className='gridDiv'></div>
-            <div className='gridDiv'>기술적 구현</div>
+            <div className='gridDiv'>
+              <a>개발도구</a><br/>
+              <span>
+                <a>프론트엔드: react,html,css</a><br/>
+                <a>백엔드: node.js</a><br/>
+                <a>DB: 파이어베이스</a>
+              </span>
+            </div>
+            <div className='gridDiv'>project file
+
+            </div>
+            <div className='gridDiv'>개요
+            <a>개발도구</a><br/>
+              <span>
+                <a>프론트엔드: react,html,css</a><br/>
+                <a>백엔드: node.js</a><br/>
+                <a>DB: 파이어베이스</a>
+              </span>
+            </div>
+            <div className='gridDiv'>기술적 구현
+            <a>개발도구</a><br/>
+              <span>
+                <a>프론트엔드: react,html,css</a><br/>
+                <a>백엔드: node.js</a><br/>
+                <a>DB: 파이어베이스</a>
+              </span>
+            </div>
           </div>
         </div>
         <div className='footerDiv'>
