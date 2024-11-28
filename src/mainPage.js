@@ -315,7 +315,7 @@ function App() {
             </div>
             <div className='gridDiv'>
               <a>project file</a>
-
+              <span>https://github.com/dried-012/test</span>
             </div>
             <div className='gridDiv'>
             <a>개발개요</a><br/>
