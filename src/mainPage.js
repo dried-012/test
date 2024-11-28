@@ -313,19 +313,20 @@ function App() {
                 <a>DB: 파이어베이스</a>
               </span>
             </div>
-            <div className='gridDiv'>project file
+            <div className='gridDiv'>
+              <a>project file</a>
 
             </div>
-            <div className='gridDiv'>개요
-            <a>개발도구</a><br/>
+            <div className='gridDiv'>
+            <a>개발개요</a><br/>
               <span>
-                <a>프론트엔드: react,html,css</a><br/>
-                <a>백엔드: node.js</a><br/>
+                <a>개발기간: 2024.8.26 ~ 2024.12.5 (3개월)</a><br/>
+                <a>개발인원: 2명</a><br/>
                 <a>DB: 파이어베이스</a>
               </span>
             </div>
-            <div className='gridDiv'>기술적 구현
-            <a>개발도구</a><br/>
+            <div className='gridDiv'>
+            <a>기술적 구현</a><br/>
               <span>
                 <a>프론트엔드: react,html,css</a><br/>
                 <a>백엔드: node.js</a><br/>
