@@ -31,7 +31,7 @@ function About() {
     }
 
     return (
-        <div>
+        <div className="wrapper">
             <span>
                 <h1 onClick={() => navigate("/")}>quiz test</h1>
             </span>
@@ -45,7 +45,17 @@ function About() {
                     </ul>
                 </div>
             </div>
-            
+            <div className="contentDiv">
+                <div>
+                    a
+                </div>
+                <div>
+                    b
+                </div>
+                <div>
+                    c
+                </div>
+            </div>
         </div>
     );
 }
