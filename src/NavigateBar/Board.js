@@ -18,6 +18,7 @@ function Board() {
   const [inputpwd, setInputpwd] = useState();
   const [isSignin, setisSignin] = useState(false);
   const [isLogined, setisLogined] = useState(false);
+  const [isSignup, setIsSignup] = useState(false);
   const [title, setTitle] = useState("");
   const [subject, setSubject] = useState("");
   const [file, setFile] = useState(null);
@@ -210,6 +211,7 @@ function Board() {
       console.log(error.message)
       alert('게시글 등록에 실패했습니다.');
     }
+    navigate("/board");
   }
 
   const handleClick = (e) => {
@@ -291,65 +293,56 @@ function Board() {
         </div>
       </div>
       <div id="loginDiv">
-        {uData == undefined && !isSignin && !isLogined &&
-          <form onSubmit={login}>
-            <div>
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                placeholder="email@xxxxx.com"
-              />
-            </div>
-            <div>
-              <input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                placeholder="비밀번호"
-              />
-            </div>
-            <button type="submit">login</button>
-            <button onClick={handleClick}>signup</button>
-          </form>
-          || isLogined &&
-          <div className='dataDiv'>
-            {uData.email}
-            <div className='dataDiv'>
-              <button onClick={logout} value={auth}>logout</button>
-            </div>
-          </div>
-          || !isLogined &&
-          <form onSubmit={userjoin}>
-            <div>
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                placeholder="email@xxxxx.com"
-              />
-            </div>
-            <div><input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              placeholder="비밀번호"
-            />
-            </div>
-            <div><input
-              type="password"
-              id="checkPass"
-              placeholder="비밀번호확인"
-            />
-            </div>
-            <button type="submit">회원가입</button>
-            <button onClick={handleClick}>돌아가기</button>
-          </form>
-        }
+      {!isLogined && !isSignup ? (
+              <form onSubmit={login}>
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="email@xxxxx.com"
+                  required
+                />
+                <input
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="비밀번호"
+                  required
+                />
+                <button type="submit">로그인</button>
+                <button type="button" onClick={() => setIsSignup(true)}>회원가입</button>
+              </form>
+            ) : !isLogined && isSignup ? (
+              <form onSubmit={userjoin}>
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="email@xxxxx.com"
+                  required
+                />
+                <input
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="비밀번호"
+                  required
+                />
+                <input
+                  type="password"
+                  id="checkPass"
+                  placeholder="비밀번호 확인"
+                  required
+                />
+                <button type="submit">회원가입</button>
+                <button type="button" onClick={() => setIsSignup(false)}>취소</button>
+              </form>
+            ) : (
+              <div className="dataDiv">
+                {uData?.email}
+                <button onClick={logout}>로그아웃</button>
+              </div>
+            )}
       </div>
       <div className='boardDiv'>
         <div className='boardTopDiv'>

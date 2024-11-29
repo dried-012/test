@@ -48,6 +48,10 @@ function BoardRead() {
       }
 
       const updateItem = (item) => {
+        if (!uData || uData.email !== clickedBoardData?.author) {
+          alert("수정 권한이 없습니다.");
+          return;
+        }
         navigate('/board', {
           state: {
             item
@@ -97,7 +101,12 @@ function BoardRead() {
         alert("삭제할 게시글이 없습니다.");
         return;
       }
-  
+      
+      if (!uData || uData.email !== clickedBoardData?.author) {
+        alert("삭제 권한이 없습니다.");
+        return;
+      }
+
       try {
         const docRef = doc(db, "board", item.id);
         await deleteDoc(docRef);

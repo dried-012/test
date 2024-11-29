@@ -13,7 +13,6 @@ import './TestContent.css'
 import gitLogo from './image/git.png'
 
 function App() {
-  const [test, setTest] = useState();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const auth = getAuth();
@@ -23,21 +22,8 @@ function App() {
   const navigate = useNavigate();
   const [isSignin, setisSignin] = useState(false);
   const [isLogined, setisLogined] = useState(false);
+  const [isSignup, setIsSignup] = useState(false);
   const [boardData, setBoardData] = useState([]);
-
-  async function getTest() {
-    const docRef = doc(db, "item", "userid");
-    try {
-      const docSnap = await getDoc(docRef);
-      if (docSnap.exists()) {
-        setTest(docSnap.data());
-      } else {
-        console.error("No such Document");
-      }
-    } catch (error) {
-      console.error("Error getting doc", error);
-    }
-  }
 
   const userjoin = async (e) => {
     e.preventDefault();
@@ -107,7 +93,6 @@ function App() {
       setPersistence(auth, browserSessionPersistence).then(() => {
         signInWithEmailAndPassword(auth, email, password).then((result) => {
           setisLogined(true);
-          console.log(result);
           const user = result.user;
           setuData({
             uid: user.uid,
@@ -221,63 +206,56 @@ function App() {
             <span>문제풀기를 선택하면 시작됩니다.</span>
           </div>
           <div id="loginDiv">
-            {uData == undefined && !isSignin && !isLogined &&
+            {!isLogined && !isSignup ? (
               <form onSubmit={login}>
-                <div>
-                  <input
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                    placeholder="email@xxxxx.com"
-                  />
-                </div>
-                <div>
-                  <input
-                    type="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                    placeholder="비밀번호"
-                  />
-                </div>
-                <button type="submit">login</button>
-                <button onClick={handleClick}>signup</button>
-              </form>
-              || isLogined &&
-              <div>
-                {uData.email}
-                <div><button onClick={logout}>logout</button></div>
-              </div>
-              || !isLogined && isSignin &&
-              <form onSubmit={userjoin}>
-                <div>
-                  <input
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                    placeholder="email@xxxxx.com"
-                  />
-                </div>
-                <div><input
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="email@xxxxx.com"
+                  required
+                />
+                <input
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  required
                   placeholder="비밀번호"
+                  required
                 />
-                </div>
-                <div><input
+                <button type="submit">로그인</button>
+                <button type="button" onClick={() => setIsSignup(true)}>회원가입</button>
+              </form>
+            ) : !isLogined && isSignup ? (
+              <form onSubmit={userjoin}>
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="email@xxxxx.com"
+                  required
+                />
+                <input
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="비밀번호"
+                  required
+                />
+                <input
                   type="password"
                   id="checkPass"
-                  placeholder="비밀번호확인"
+                  placeholder="비밀번호 확인"
+                  required
                 />
-                </div>
                 <button type="submit">회원가입</button>
-                <button onClick={handleClick}>돌아가기</button>
+                <button type="button" onClick={() => setIsSignup(false)}>취소</button>
               </form>
-            }
+            ) : (
+              <div className="dataDiv">
+                {uData?.email}
+                <button onClick={logout}>로그아웃</button>
+              </div>
+            )}
           </div>
           <div className='boardDiv'>
             <div className='boardTopDiv'>
@@ -307,30 +285,30 @@ function App() {
           </div>
           <div className='gridboxDiv'>
             <div className='gridDiv'>
-              <a>개발도구</a><br/>
+              <a>개발도구</a><br />
               <span>
-                <a>프론트엔드: react,html,css</a><br/>
-                <a>백엔드: node.js</a><br/>
+                <a>프론트엔드: react,html,css</a><br />
+                <a>백엔드: node.js</a><br />
                 <a>DB: 파이어베이스</a>
               </span>
             </div>
             <div className='gridDiv'>
-              <a>project file</a><br/>
-              <span><a href='https://github.com/dried-012/test'><img id="gitlogo" src={gitLogo} alt=""/></a></span>
+              <a>project file</a><br />
+              <span><a href='https://github.com/dried-012/test'><img id="gitlogo" src={gitLogo} alt="" /></a></span>
             </div>
             <div className='gridDiv'>
-            <a>개발개요</a><br/>
+              <a>개발개요</a><br />
               <span>
-                <a>개발기간: 2024.8.26 ~ 2024.12.5 (3개월)</a><br/>
-                <a>개발인원: 2명</a><br/>
+                <a>개발기간: 2024.8.26 ~ 2024.12.5 (3개월)</a><br />
+                <a>개발인원: 2명</a><br />
                 <a>개발계기: 자격증 공부를 위한 CBT사이트를 만들어 보고 싶었음</a>
               </span>
             </div>
             <div className='gridDiv'>
-            <a>기술적 구현</a><br/>
+              <a>기술적 구현</a><br />
               <span>
-                <a>게시판(CRUD구현)</a><br/>
-                <a>react를 활용한 프론트엔드 구성</a><br/>
+                <a>게시판(CRUD구현)</a><br />
+                <a>react를 활용한 프론트엔드 구성</a><br />
                 <a>node.js와 파이어베이스 API를 활용한 백엔드 구성</a>
               </span>
             </div>
@@ -339,7 +317,7 @@ function App() {
         <div className='footerDiv'>
           <div className='footerSubDiv'>
             <span>
-              모든 문제들의 저작권은 원저작권자에게 있습니다. 본 사이트는 웹상에 공개되어 있는 문제만 모아서 보여드립니다.<br/>
+              모든 문제들의 저작권은 원저작권자에게 있습니다. 본 사이트는 웹상에 공개되어 있는 문제만 모아서 보여드립니다.<br />
               <a>본 페이지는 상업적 목적이 아닌 개인 포트폴리오용으로 제작되었습니다.</a>
             </span>
           </div>
