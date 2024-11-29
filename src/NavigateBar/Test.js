@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import { doc, collection, getDoc, getDocs, setDoc, updateDoc, getFirestore, Timestamp } from 'firebase/firestore';
 import { db,_apiKey } from '../firebase';
 import DOMPurify from 'dompurify';
+
 function Test(){
   const navigate = useNavigate();
   const [testList, setTestList] = useState([]);
@@ -109,6 +110,12 @@ function Test(){
   }
 
   const isBothNull = !clickedTestTitle && !selectedTestName;
+  const answeredQuestions = Object.values(checkResults).filter(value => value === "correct" || value === "wrong").length;
+  const correctAnswers = Object.values(checkResults).filter(value => value === "correct").length;
+  const wrongAnswers = Object.values(checkResults).filter(value => value === "wrong").length;
+  const score = correctAnswers * 5;
+  const isAllAnswered = answeredQuestions === totalQuestions;
+  const isPass = score >= 60;
 
     return(
       
@@ -165,7 +172,7 @@ function Test(){
                 <div id="testMainTitleDivInside" className="Inside">
                   <div id="testMainTitleOnDiv" className="TestWidth">
                     <div id="testMainTitleOnDivInside" className="Inside">
-                      <div id="test-TitleDiv">
+                      <div id="test-TitleDiv" className="MIDDLE">
                         {!isBothNull && (
                           <h1 className="test-title">
                             {clickedTestTitle || selectedTestName}
@@ -210,9 +217,17 @@ function Test(){
                                 
                                 <p><span className="testNum">{field.num}</span> <span dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(field.title) }}></span></p>
 
-                                <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(field.description) }}></div>
+                                {field.description && (
+                                  <div className="DESCRIPTION" dangerouslySetInnerHTML={{ __html: field.description }} />
+                                )}
 
-                                <div><p><textarea className="testInsert" placeholder="답 입력"></textarea></p></div>
+                                {field.image && (
+                                  <div className="IMAGE">
+                                    <img src={require(`../TestImage/${field.image}.png`)} alt={field.image} />
+                                  </div>
+                                )}
+
+                                <div><p className="ANSWER"><textarea className="testInsert" placeholder="답 입력"></textarea></p></div>
                                 <div>
                                   <div className="AnswerBox">
                                     {!isCoverVisibleForKey && (
@@ -269,7 +284,7 @@ function Test(){
                 <div id="testMainSelectDivInside" className="Inside">
                   <div id="testMainSelectPreDiv" className="TestWidth">
                     <div id="testMainSelectPreDivInside" className="Inside">
-
+                      
                     </div>
                   </div>
                 </div>
@@ -279,7 +294,106 @@ function Test(){
                 <div id="testMainFooterDivInside" className="Inside">
                   <div id="testMainFooterFinishDiv" className="TestWidth">
                     <div id="testMainFooterFinishDivInside" className="Inside">
-                      
+
+                    {clickedTestTitle &&
+                      <div id="testProgress" className="RELATIVE">
+                          
+                        <div id="testProgressLeft" className="ABSOLUTE LEFT UP HALFQUAD">
+                          <div id="testProgressLeftIn" className="Inside RELATIVE">
+                            <div id="testProgressLeftUp" className="ABSOLUTE UP HORIZONTALRECTANGULAR">
+                              <div id="testProgressLeftUpIn" className="Inside MIDDLE">
+                                <h3>푼 문제 개수 / 총 문제 개수</h3>
+                              </div>
+                            </div>
+                            <div id="testProgressLeftDown" className="ABSOLUTE DOWN HORIZONTALRECTANGULAR">
+                              <div id="testProgressLeftDownIn" className="Inside MIDDLE">
+
+                                <p><h2>{answeredQuestions} / {totalQuestions}</h2></p>
+                                
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                          
+
+                        <div id="testProgressRight" className="ABSOLUTE RIGHT UP HALFQUAD">
+                          <div id="testProgressRightIn" className="Inside RELATIVE">
+                            <div className="ABSOLUTE UP HORIZONTALRECTANGULAR">
+                              <div className="Inside MIDDLE">
+                                <h4>선택한<br></br>정답 수 / 오답 수</h4>
+                              </div>
+                            </div>
+                            <div className="ABSOLUTE DOWN HORIZONTALRECTANGULAR">
+                              <div className="Inside MIDDLE">
+                                <p><h3>
+                                  {correctAnswers}
+                                  &nbsp;/&nbsp;
+                                  {wrongAnswers}
+                                </h3></p>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div id="testProgressLeft_bottom" className="ABSOLUTE LEFT DOWN HALFQUAD">
+                          <div id="testProgressLeft_bottomIn" className="Inside RELATIVE">
+                            <div className="ABSOLUTE UP HORIZONTALRECTANGULAR">
+                              <div className="Inside MIDDLE">
+                                <h1>예상 점수</h1>
+                              </div>
+                            </div>
+                            <div className="ABSOLUTE DOWN HORIZONTALRECTANGULAR">
+                              <div className="Inside MIDDLE">
+                                <p><h2>{score}</h2></p>
+                              </div>
+                            </div>                         
+                          </div>
+                        </div>
+
+                        <div id="testProgressRight_bottom" className="ABSOLUTE RIGHT DOWN HALFQUAD">
+                          <div id="testProgressRight_bottomIn" className="Inside">
+                            {isAllAnswered &&
+                            <div className="Inside RELATIVE">
+                              <div className="ABSOLUTE UP HORIZONTALRECTANGULAR">
+                                <div className="Inside MIDDLE">
+                                  {isPass &&
+                                    <p>합격입니다.</p>
+                                  || !isPass &&
+                                    <p>불합격입니다.</p>
+                                  }
+                                </div>
+                              </div>
+                              
+                              <div className="ABSOLUTE DOWN HORIZONTALRECTANGULAR">
+                                <div className="Inside MIDDLE">
+                                  
+                                </div>
+                              </div>
+                            </div>
+                            || !isAllAnswered &&
+                            <div className="Inside RELATIVE">
+                              <div className="ABSOLUTE UP HORIZONTALRECTANGULAR">
+                                <div className="Inside MIDDLE">
+                                  시험 종료시
+                                  풀지 않은 문제는 오답 처리합니다.
+                                </div>
+                              </div>
+                              
+                              <div className="ABSOLUTE DOWN HORIZONTALRECTANGULAR">
+                                <div className="Inside MIDDLE">
+                                  시험 종료 버튼
+                                </div>
+                              </div>
+                            </div>
+                            }
+
+                          </div>
+                        </div>
+                        
+
+                      </div>
+
+                      }
                     </div>
                   </div>
                 </div>

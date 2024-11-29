@@ -1,3 +1,20 @@
+.question-block th {
+    border: 1px solid black;
+    text-align: center;
+}
+
+.question-block td {
+    border: 1px solid black;
+}
+
+.DESCRIPTION {
+    background-color: #efefef;
+}
+
+.ANSWER {
+    text-align: center;
+}
+
 .Inside {
     width: 100%;
     height: 100%;
@@ -18,6 +35,7 @@
 
 .testInsert {
     font-size: 20px;
+    width: 80%;
 }
 
 .question-block {
@@ -40,6 +58,49 @@
 .AnswerCoverOn {
     text-align: center;
     background-color: aquamarine;
+}
+
+.MIDDLE {
+    display: flex; /* 플렉스박스를 활성화 */
+    justify-content: center; /* 가로 중앙 정렬 */
+    align-items: center; /* 세로 중앙 정렬 */
+    height: 100%; /* 부모 컨테이너 높이 */
+    text-align: center; /* 텍스트 가운데 정렬 */
+}
+
+.RELATIVE {
+    position: relative;
+}
+
+.ABSOLUTE {
+    position: absolute;
+}
+
+.LEFT {
+    left: 0;
+}
+
+.RIGHT {
+    right: 0;
+}
+
+.UP {
+    top: 0;
+}
+
+.DOWN {
+    bottom: 0;
+}
+
+.HALFQUAD {
+    height: 50%;
+    width: 50%;
+}
+
+.HORIZONTALRECTANGULAR
+{
+    height: 50%;
+    width: 100%;
 }
 
 /*
@@ -80,7 +141,7 @@
 
 #testMainFooterDiv {
     border: 1px solid coral;
-    height: 100px;
+    height: 150px;
 }
 
 #testMainListButtonDiv {
@@ -118,10 +179,13 @@
     gap: 10px;
 }
 
+/*
 #test-TitleDiv {
-    display: flex; /* 플렉스박스를 활성화 */
-    justify-content: center; /* 가로 중앙 정렬 */
-    align-items: center; /* 세로 중앙 정렬 */
-    height: 100%; /* 부모 컨테이너 높이 */
-    text-align: center; /* 텍스트 가운데 정렬 */
+
+}
+*/
+
+#testProgress {
+    height: 100%;
+    width: 100%;
 }
