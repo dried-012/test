@@ -15,5 +15,4 @@ npm i react react-dom
 
 npm i redux-persist
 
-// 못추
 npm install dompurify

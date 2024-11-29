@@ -18,11 +18,12 @@ function Board() {
   const [inputpwd, setInputpwd] = useState();
   const [isSignin, setisSignin] = useState(false);
   const [isLogined, setisLogined] = useState(false);
-  const [title, setTitle] = useState('');
-  const [subject, setSubject] = useState('');
+  const [title, setTitle] = useState("");
+  const [subject, setSubject] = useState("");
   const [file, setFile] = useState(null);
   const [boardCon, setBoardCon] = useState(false);
   const {item} = location.state || {};
+  const [boardRead, setBoardRead] = useState();
 
   async function getBoard() {
     const dataArray = [];
@@ -39,14 +40,23 @@ function Board() {
   }
 
   useEffect(() => {
-    try{
-      if(item){
-        console.log(item);
-        setBoardCon(true);
+    const fetchBoardData = async () => {
+      try{
+        if(item){
+          console.log(item.id)
+          setBoardCon(true);
+          const data = await readBoard();
+          if(data){
+            setTitle(data.title||"");
+            setSubject(data.subject||"");
+            setFile(data.file||null);
+          }
+        }
+      }catch(error){
+        console.log(error);
       }
-    }catch(error){
-      console.log(error);
-    }
+    };
+    fetchBoardData();
   },[item]);
 
   const pageUp = (e) => {
@@ -172,17 +182,26 @@ function Board() {
       alert('제목과 본문을 모두 입력해 주세요.');
       return;
     }
-    const dateRef = new Date().getTime();
     try {
-      const docRef = await addDoc(collection(db, "board"), {
+      const newData = {
         title: title,
         subject: subject,
         file: file ? file.name : null,
         date: Timestamp.now(),
-        author: uData.email
-      });
-      console.log("문서추가 완료, 문서 id:" + docRef.id);
-      alert("게시글 등록완료");
+        author: uData.email,
+      };
+      if (item&&item?.id) {
+        // 기존 문서 업데이트
+        const docRef = doc(db, "board", item.id);
+        await updateDoc(docRef, newData);
+        console.log(`문서 업데이트 완료, 문서 id: ${item.id}`);
+        alert("게시글이 업데이트되었습니다.");
+      } else {
+        // 새 문서 추가
+        const docRef = await addDoc(collection(db, "board"), newData);
+        console.log(`문서 추가 완료, 문서 id: ${docRef.id}`);
+        alert("새 게시글이 등록되었습니다.");
+      }
       setTitle('');
       setSubject('');
       setFile(null);
@@ -207,13 +226,6 @@ function Board() {
     }
   }
 
-  const boardConBtn = (e) => {
-    if (!boardCon)
-      setBoardCon(true);
-    else
-      setBoardCon(false);
-  }
-
   const boardClicked = (item) => {
     navigate('/boardRead', {
       state: {
@@ -221,6 +233,26 @@ function Board() {
       }
     });
   }
+
+  const readBoard = async() =>{
+    const boardRef = item.id;
+    const docRef = doc(db,"board",boardRef);
+    try {
+      const docSnap = await getDoc(docRef);
+      if(docSnap.exists){
+        let data = docSnap.data();
+        if(data.date && data.date instanceof Timestamp){
+          data.date = data.date.toDate();
+        }
+        return data;
+      }else {
+        console.error("No such Document");
+        return null;
+      }
+    }catch(error){
+
+    }
+  };
 
   useEffect(() => {
     try {
@@ -346,7 +378,7 @@ function Board() {
         </div>
       </div>
       <div className='boardConDiv'>
-        <button onClick={boardConBtn}>글쓰기</button>
+        <button onClick={() => setBoardCon((prev) => !prev)}>글쓰기</button>
         {boardCon &&
           <div className='boardWrDiv'>
             <form onSubmit={insBtnClick}>

@@ -4,7 +4,7 @@ import '../css/BoardRead.css';
 import { db,_apiKey } from '../firebase';
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom'
-import { doc, collection, getDoc, getDocs, setDoc, updateDoc, getFirestore, Timestamp, addDoc } from 'firebase/firestore';
+import { doc, collection, getDoc, getDocs, setDoc, updateDoc, getFirestore, Timestamp, addDoc, deleteDoc } from 'firebase/firestore';
 import { getAuth,signInWithEmailAndPassword,createUserWithEmailAndPassword, signOut, setPersistence, browserSessionPersistence, onAuthStateChanged } from 'firebase/auth';
 
 function BoardRead() {
@@ -92,6 +92,24 @@ function BoardRead() {
       }
     };
 
+    const deleteBoard = async () => {
+      if (!item?.id) {
+        alert("삭제할 게시글이 없습니다.");
+        return;
+      }
+  
+      try {
+        const docRef = doc(db, "board", item.id);
+        await deleteDoc(docRef);
+        console.log(`문서 삭제 완료, 문서 id: ${item.id}`);
+        alert("게시글이 삭제되었습니다.");
+        navigate('/');
+      } catch (error) {
+        console.error('문서 삭제 실패:', error);
+        alert('게시글 삭제에 실패했습니다.');
+      }
+    };
+  
     useEffect(() => {
         try {
             getBoard();
@@ -132,7 +150,7 @@ function BoardRead() {
                   <div className='brBtnDiv'>
                     <button className='brBtn' onClick={() => updateItem(item)}>수정하기</button>
                     <span></span>
-                    <button className='brBtn'>삭제하기</button>
+                    <button className='brBtn' onClick={deleteBoard}>삭제하기</button>
                   </div>
                 </h2>
                 <div className='title'>{clickedBoardData?.title}</div>
