@@ -15,6 +15,8 @@ function Test(){
   const [checkResults, setCheckResults] = useState({});
   const [clickedTestTitle, setClickedTestTitle] = useState("");
   const [totalQuestions, setTotalQuestions] = useState(0);
+  const [currentState, setCurrentState] = useState("default");
+  const [answers, setAnswers] = useState({});
 
   const pageUp = (e) => {
     e.preventDefault();
@@ -78,6 +80,7 @@ function Test(){
         setIsCoverVisible({});
         setCheckResults({});
         setClickedTestTitle(formatDocName(docId));
+        setAnswers({});
 
         const questionCount = Object.keys(data).length;
         setTotalQuestions(questionCount);
@@ -108,6 +111,27 @@ function Test(){
     setClickedTestTitle(null);
     setSelectedTestName(null);
   }
+
+  const stateTransitions = {
+    default: "confirmEndTest",
+    confirmEndTest: {
+      yes: "saveTest",
+      no: "default",
+    },
+    saveTest: {
+      yes: "default",
+      no: "default",
+    },
+  };
+
+  const handleStateChange = (action) => {
+    const nextState = stateTransitions[currentState];
+    if (typeof nextState === "string") {
+      setCurrentState(nextState);
+    } else {
+      setCurrentState(nextState[action]);
+    }
+  };
 
   const isBothNull = !clickedTestTitle && !selectedTestName;
   const answeredQuestions = Object.values(checkResults).filter(value => value === "correct" || value === "wrong").length;
@@ -227,7 +251,21 @@ function Test(){
                                   </div>
                                 )}
 
-                                <div><p className="ANSWER"><textarea className="testInsert" placeholder="답 입력"></textarea></p></div>
+                                <div>
+                                  <p className="ANSWER">
+                                    <textarea 
+                                    className="testInsert" 
+                                    placeholder="답 입력" 
+                                    value={answers[key] || ""}
+                                    onChange={(e) =>
+                                      setAnswers((prev) => ({
+                                        ...prev,
+                                        [key]: e.target.value,
+                                      }))
+                                    }>
+                                    </textarea>
+                                  </p>
+                                </div>
                                 <div>
                                   <div className="AnswerBox">
                                     {!isCoverVisibleForKey && (
@@ -275,8 +313,99 @@ function Test(){
                         )}
                       </div>
 
+                      <div id="checkCOrWDiv">
+                      {clickedTestTitle &&
+                        <div>
+
+                          <div className="CheckQuestion">
+                            <div>
+                              [숫자 ex) 1]
+                            </div>
+                            <div>
+                              [기본 ? | 선택에 따라 O / X]
+                            </div>
+                          </div>
+
+                          <div className="CheckQuestion">
+                            <div>
+                            [숫자 ex) 2]
+                            </div>
+                            <div>
+                            [기본 ? | 선택에 따라 O / X]
+                            </div>
+                          </div>
+
+                          <div className="CheckQuestion">
+                            <div>
+                            [숫자 ex) ...20]
+                            </div>
+                            <div>
+                            [기본 ? | 선택에 따라 O / X]
+                            </div>
+                          </div>
+
+                          <div className="CheckQuestion">
+                            <div>
+                            [숫자 ex) ...20]
+                            </div>
+                            <div>
+                            [기본 ? | 선택에 따라 O / X]
+                            </div>
+                          </div>
+
+                          <div className="CheckQuestion">
+                            <div>
+                            [숫자 ex) ...20]
+                            </div>
+                            <div>
+                            [기본 ? | 선택에 따라 O / X]
+                            </div>
+                          </div>
+
+                          <div className="CheckQuestion">
+                            <div>
+                            [숫자 ex) ...20]
+                            </div>
+                            <div>
+                            [기본 ? | 선택에 따라 O / X]
+                            </div>
+                          </div>
+
+                          <div className="CheckQuestion">
+                            <div>
+                            [숫자 ex) ...20]
+                            </div>
+                            <div>
+                            [기본 ? | 선택에 따라 O / X]
+                            </div>
+                          </div>
+
+                          <div className="CheckQuestion">
+                            <div>
+                            [숫자 ex) ...20]
+                            </div>
+                            <div>
+                            [기본 ? | 선택에 따라 O / X]
+                            </div>
+                          </div>
+
+                          <div className="CheckQuestion">
+                            <div>
+                            [숫자 ex) ...20]
+                            </div>
+                            <div>
+                            [기본 ? | 선택에 따라 O / X]
+                            </div>
+                          </div>
+
+                        </div>
+                        }
+                      </div>
+
                     </div>
+
                   </div>
+
                 </div>
               </div>
 
@@ -372,6 +501,10 @@ function Test(){
                             </div>
                             || !isAllAnswered &&
                             <div className="Inside RELATIVE">
+                              
+
+                              {currentState === "default" && (
+                              <>
                               <div className="ABSOLUTE UP HORIZONTALRECTANGULAR">
                                 <div className="Inside MIDDLE">
                                   시험 종료시
@@ -381,9 +514,59 @@ function Test(){
                               
                               <div className="ABSOLUTE DOWN HORIZONTALRECTANGULAR">
                                 <div className="Inside MIDDLE">
-                                  시험 종료 버튼
+                                  <button onClick={() => handleStateChange()}>시험 종료</button>
                                 </div>
                               </div>
+                              </>
+                              )}
+
+                              {currentState === "confirmEndTest" && (
+                              <>
+                              <div className="ABSOLUTE UP HORIZONTALRECTANGULAR">
+                                <div className="Inside MIDDLE">
+                                  정말로 시험을 종료하시겠습니까?
+                                </div>
+                              </div>
+                              
+                              <div className="ABSOLUTE DOWN HORIZONTALRECTANGULAR">
+                                <div className="Inside MIDDLE">
+                                  <button onClick={() => handleStateChange("yes")}>네</button>
+                                  <button onClick={() => handleStateChange("no")}>아니오</button>
+                                </div>
+                              </div>
+                              </>
+                              )}
+
+                              {currentState === "saveTest" && (
+                              <>
+                              <div className="ABSOLUTE UP HORIZONTALRECTANGULAR">
+                                <div className="Inside MIDDLE">
+                                  시험을 저장하시겠습니까?
+                                </div>
+                              </div>
+                              
+                              <div className="ABSOLUTE DOWN HORIZONTALRECTANGULAR">
+                                <div className="Inside MIDDLE">
+                                  <button
+                                    onClick={() => {
+                                      alert("시험이 저장되었습니다!");
+                                      handleStateChange("yes");
+                                      handleReset();
+                                    }}
+                                  >
+                                    네
+                                  </button>
+                                  <button onClick={() => 
+                                  {
+                                    handleStateChange("no");
+                                    handleReset();
+                                  }}>아니오</button>
+                                </div>
+                              </div>
+                              </>
+                              )}
+
+
                             </div>
                             }
 

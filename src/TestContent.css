@@ -103,6 +103,13 @@
     width: 100%;
 }
 
+.CheckQuestion {
+    width: 50%;
+    text-align: center;
+    display: inline-block;
+    margin-bottom: 15px;
+}
+
 /*
 .AnswerBox {
     height: 100px;
@@ -110,66 +117,66 @@
 */
 
 #testMainDiv {
-    border: 1px solid black;
+    border: 0px solid black;
     width: 100%;
 }
 
 #testMainListDiv {
-    border: 1px solid red;
+    border: 0px solid red;
     height: 100px;
 }
 
 #testMainTitleDiv {
-    border: 1px solid green;
+    border: 0px solid green;
     height: 100px;
 }
 
 #testMainSubjectDiv {
-    border: 1px solid yellow;
+    border: 0px solid yellow;
     height: 100px;
 }
 
 #testMainContentDiv {
-    border: 1px solid blue;
+    border: 0px solid blue;
     height: 100%;
 }
 
 #testMainSelectDiv {
-    border: 1px solid tan;
+    border: 0px solid tan;
     height: 100px;
 }
 
 #testMainFooterDiv {
-    border: 1px solid coral;
+    border: 0px solid coral;
     height: 150px;
 }
 
 #testMainListButtonDiv {
-    border: 1px solid cyan;
+    border: 0px solid cyan;
 }
 
 #testMainTitleOnDiv {
-    border: 1px solid purple;
+    border: 0px solid purple;
 }
 
 #testMainSubjectSetDiv {
-    border: 1px solid teal;
+    border: 0px solid teal;
 }
 
 #testMainContentQuestionDiv {
-    border: 1px solid magenta;
+    border: 0px solid magenta;
 }
 
 #testMainSelectPreDiv {
-    border: 1px solid tomato;
+    border: 0px solid tomato;
 }
 
 #testMainFooterFinishDiv {
-    border: 1px solid turquoise;
+    border: 0px solid turquoise;
 }
 
 #testMainContentQuestionUpdateDiv {
-    border: 1px solid black;
+    border: 0px solid black;
     height: 100%;
 }
 
@@ -188,4 +195,20 @@
 #testProgress {
     height: 100%;
     width: 100%;
+}
+
+#testMainContentQuestionUpdateDiv {
+    display: inline-block;
+    width: 80%;
+    height:100%;
+}
+
+#checkCOrWDiv {
+    display: inline-block;
+    width: 20%;
+    height:100%;
+    position: sticky;
+    top: 30px;
+    overflow: auto;
+    height: 150px;
 }
