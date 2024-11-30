@@ -11,17 +11,9 @@ function BoardRead() {
     const navigate = useNavigate();
     const [boardData,setBoardData] = useState([]);
     const [clickedBoardData,setClickedBoardData] = useState();
-    const [email, setEmail] = useState();
-    const [password, setPassword] = useState();
     const auth = getAuth();
     const [uData, setuData] = useState();
-    const [inputid, setInputid] = useState();
-    const [inputpwd, setInputpwd] = useState();
-    const [isSignin, setisSignin] = useState(false);
     const [isLogined,setisLogined] = useState(false);
-    const [title,setTitle] = useState('');
-    const [subject,setSubject] = useState('');
-    const [file,setFile] = useState(null);
     const location = useLocation();
     const {item} = location.state || {};
 
