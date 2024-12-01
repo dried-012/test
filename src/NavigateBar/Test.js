@@ -5,6 +5,8 @@ import { doc, collection, getDoc, getDocs, setDoc, updateDoc, getFirestore, Time
 import { db,_apiKey } from '../firebase';
 import DOMPurify from 'dompurify';
 
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
+
 function Test(){
   const navigate = useNavigate();
   const [testList, setTestList] = useState([]);
@@ -158,6 +160,29 @@ function Test(){
   const isAllAnswered = answeredQuestions === totalQuestions;
   const isPass = score >= 60;
 
+  const auth = getAuth();
+  const [uData, setuData] = useState();
+  const [isLogined, setisLogined] = useState(false);
+
+  useEffect(() => {
+    try {
+      const unsubcribe = onAuthStateChanged(auth, (user) => {
+        if (user) {
+          setisLogined(true);
+          setuData({
+            uid: user.uid,
+            email: user.email
+          });
+        } else {
+          setisLogined(false);
+        }
+      });
+      return unsubcribe;
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
+
     return(
       
       <div>
@@ -220,7 +245,11 @@ function Test(){
                           </h1>
                         )}
                         {isBothNull && (
-                          <h1 className="test-title">시험을 선택하세요</h1>
+                          <h1 className="test-title"> 
+                          {isLogined && <span>환영합니다. {uData?.email}님</span>} 
+                          &nbsp;시험을 선택하세요.&nbsp;
+                          {!isLogined && <span>(로그인시 시험 결과 저장 가능)</span>}
+                          </h1>
                         )}
                       </div>
                     </div>
@@ -232,7 +261,7 @@ function Test(){
                 <div id="testMainSubjectDivInside" className="Inside">
                   <div id="testMainSubjectSetDiv" className="TestWidth">
                     <div id="testMainSubjectSetDivInside" className="Inside">
-                      
+
                     </div>
                   </div>
                 </div>
@@ -516,7 +545,11 @@ function Test(){
                               
                               <div className="ABSOLUTE DOWN HORIZONTALRECTANGULAR">
                                 <div className="Inside MIDDLE">
-                                  <button onClick={() => handleStateChange()}>시험 완료</button>
+                                  { isLogined &&
+                                    <button onClick={() => handleStateChange()}>시험 완료</button>
+                                    || !isLogined &&
+                                    <button onClick={() => handleReset()}>시험 완료</button>
+                                  }
                                 </div>
                               </div>
                               </>
@@ -584,7 +617,11 @@ function Test(){
                               
                               <div className="ABSOLUTE DOWN HORIZONTALRECTANGULAR">
                                 <div className="Inside MIDDLE">
-                                  <button onClick={() => handleStateChange("yes")}>네</button>
+                                  { isLogined &&
+                                    <button onClick={() => handleStateChange("yes")}>네</button>
+                                    || !isLogined && 
+                                    <button onClick={() => handleReset()}>네</button>
+                                  }
                                   <button onClick={() => handleStateChange("no")}>아니오</button>
                                 </div>
                               </div>
