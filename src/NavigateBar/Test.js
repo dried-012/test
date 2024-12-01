@@ -156,8 +156,10 @@ function Test(){
   };
 
   const testSave = async () => {
-    const timestamp = new Date().toISOString();
-    const fieldName = `${uData?.email}_${timestamp}_${selectedCollectionName}_${selectedDocId}`;
+    const time = new Date().toISOString();
+    const timestamp = Timestamp.fromDate(new Date());
+
+    const fieldName = `${uData?.email}_${time}_${selectedCollectionName}_${selectedDocId}`;
 
     const questionMaps = {};
     Object.keys(selectedDocContent).forEach((key, index) => {
@@ -176,6 +178,8 @@ function Test(){
           testList: selectedCollectionName,
           docTest: selectedDocId,
           date: timestamp,
+          finalScore: score,
+          pass: isPass,
           ...questionMaps,
         }
       }, { merge: true });
