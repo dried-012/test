@@ -12,6 +12,7 @@ function Test(){
   const [testList, setTestList] = useState([]);
   const [selectedTestName, setSelectedTestName] = useState("");
   const [selectedCollectionName, setSelectedCollectionName] = useState("");
+  const [selectedDocId, setSelectedDocId] = useState("");
   const [selectedDocContent, setSelectedDocContent] = useState(null);
   const [isCoverVisible, setIsCoverVisible] = useState({});
   const [checkResults, setCheckResults] = useState({});
@@ -85,6 +86,8 @@ function Test(){
         setClickedTestTitle(formatDocName(docId));
         setAnswers({});
 
+        setSelectedDocId(docId);
+
         const questionCount = Object.keys(data).length;
         setTotalQuestions(questionCount);
       } else {
@@ -152,6 +155,37 @@ function Test(){
     }
   };
 
+  const testSave = async () => {
+    const timestamp = new Date().toISOString();
+    const fieldName = `${uData?.email}_${timestamp}_${selectedCollectionName}_${selectedDocId}`;
+
+    const questionMaps = {};
+    Object.keys(selectedDocContent).forEach((key, index) => {
+      const field = selectedDocContent[key];
+      questionMaps[index + 1] = {
+        answer: answers[key] || "",
+        correct: checkResults[key] === "correct",
+        num: field.num,
+      };
+    });
+
+    const saveRef = doc(db, "testComplete", "resultSave");
+    try {
+      await setDoc(saveRef, {
+        [fieldName]: {
+          testList: selectedCollectionName,
+          docTest: selectedDocId,
+          date: timestamp,
+          ...questionMaps,
+        }
+      }, { merge: true });
+      alert("시험 데이터가 저장되었습니다!");
+    } catch (error) {
+      console.error("시험 데이터 저장 중 오류 발생:", error);
+      alert("시험 데이터 저장에 실패했습니다.");
+    }
+  };
+
   const isBothNull = !clickedTestTitle && !selectedTestName;
   const answeredQuestions = Object.values(checkResults).filter(value => value === "correct" || value === "wrong").length;
   const correctAnswers = Object.values(checkResults).filter(value => value === "correct").length;
@@ -159,6 +193,7 @@ function Test(){
   const score = correctAnswers * 5;
   const isAllAnswered = answeredQuestions === totalQuestions;
   const isPass = score >= 60;
+  const noAnswerd = totalQuestions - answeredQuestions;
 
   const auth = getAuth();
   const [uData, setuData] = useState();
@@ -362,88 +397,7 @@ function Test(){
                       <div id="checkCOrWDiv">
                       {clickedTestTitle &&
                         <div>
-
-                          <div className="CheckQuestion">
-                            <div>
-                              [숫자 ex) 1]
-                            </div>
-                            <div>
-                              [기본 ? | 선택에 따라 O / X]
-                            </div>
-                          </div>
-
-                          <div className="CheckQuestion">
-                            <div>
-                            [숫자 ex) 2]
-                            </div>
-                            <div>
-                            [기본 ? | 선택에 따라 O / X]
-                            </div>
-                          </div>
-
-                          <div className="CheckQuestion">
-                            <div>
-                            [숫자 ex) ...20]
-                            </div>
-                            <div>
-                            [기본 ? | 선택에 따라 O / X]
-                            </div>
-                          </div>
-
-                          <div className="CheckQuestion">
-                            <div>
-                            [숫자 ex) ...20]
-                            </div>
-                            <div>
-                            [기본 ? | 선택에 따라 O / X]
-                            </div>
-                          </div>
-
-                          <div className="CheckQuestion">
-                            <div>
-                            [숫자 ex) ...20]
-                            </div>
-                            <div>
-                            [기본 ? | 선택에 따라 O / X]
-                            </div>
-                          </div>
-
-                          <div className="CheckQuestion">
-                            <div>
-                            [숫자 ex) ...20]
-                            </div>
-                            <div>
-                            [기본 ? | 선택에 따라 O / X]
-                            </div>
-                          </div>
-
-                          <div className="CheckQuestion">
-                            <div>
-                            [숫자 ex) ...20]
-                            </div>
-                            <div>
-                            [기본 ? | 선택에 따라 O / X]
-                            </div>
-                          </div>
-
-                          <div className="CheckQuestion">
-                            <div>
-                            [숫자 ex) ...20]
-                            </div>
-                            <div>
-                            [기본 ? | 선택에 따라 O / X]
-                            </div>
-                          </div>
-
-                          <div className="CheckQuestion">
-                            <div>
-                            [숫자 ex) ...20]
-                            </div>
-                            <div>
-                            [기본 ? | 선택에 따라 O / X]
-                            </div>
-                          </div>
-
+                          
                         </div>
                         }
                       </div>
@@ -459,7 +413,7 @@ function Test(){
                 <div id="testMainSelectDivInside" className="Inside">
                   <div id="testMainSelectPreDiv" className="TestWidth">
                     <div id="testMainSelectPreDivInside" className="Inside">
-                      
+
                     </div>
                   </div>
                 </div>
@@ -514,12 +468,12 @@ function Test(){
                           <div id="testProgressLeft_bottomIn" className="Inside RELATIVE">
                             <div className="ABSOLUTE UP HORIZONTALRECTANGULAR">
                               <div className="Inside MIDDLE">
-                                <h1>예상 점수</h1>
+                                <h1>{!isAllAnswered && <span>예상</span>} 점수</h1>
                               </div>
                             </div>
                             <div className="ABSOLUTE DOWN HORIZONTALRECTANGULAR">
                               <div className="Inside MIDDLE">
-                                <p><h2>{score}</h2></p>
+                                <p><h2>{score} {isPass && <span>합격</span> || !isPass && <span>불합격</span>}점</h2></p>
                               </div>
                             </div>                         
                           </div>
@@ -567,8 +521,8 @@ function Test(){
                                 <div className="Inside MIDDLE">
                                   <button
                                     onClick={() => {
-                                      alert("시험이 저장되었습니다!");
                                       handleStateChange("yes");
+                                      testSave();
                                       handleReset();
                                     }}
                                   >
@@ -594,7 +548,7 @@ function Test(){
                               <>
                               <div className="ABSOLUTE UP HORIZONTALRECTANGULAR">
                                 <div className="Inside MIDDLE">
-                                  시험 종료시
+                                  풀지 않은 문제 {noAnswerd} 개 <br></br>
                                   풀지 않은 문제는 오답 처리합니다.
                                 </div>
                               </div>
@@ -640,8 +594,8 @@ function Test(){
                                 <div className="Inside MIDDLE">
                                   <button
                                     onClick={() => {
-                                      alert("시험이 저장되었습니다!");
                                       handleStateChange("yes");
+                                      testSave();
                                       handleReset();
                                     }}
                                   >
