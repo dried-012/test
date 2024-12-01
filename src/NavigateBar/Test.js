@@ -15,7 +15,8 @@ function Test(){
   const [checkResults, setCheckResults] = useState({});
   const [clickedTestTitle, setClickedTestTitle] = useState("");
   const [totalQuestions, setTotalQuestions] = useState(0);
-  const [currentState, setCurrentState] = useState("default");
+  const [finishState, setFinishState] = useState("finish");
+  const [currentState, setCurrentState] = useState("over");
   const [answers, setAnswers] = useState({});
 
   const pageUp = (e) => {
@@ -110,26 +111,42 @@ function Test(){
     setCheckResults({});
     setClickedTestTitle(null);
     setSelectedTestName(null);
+    setFinishState("finish");
+    setCurrentState("over");
   }
 
   const stateTransitions = {
-    default: "confirmEndTest",
+    finish: "end",
+    end: {
+      yes: "finish",
+      no: "finish",
+    },
+    over: "confirmEndTest",
     confirmEndTest: {
       yes: "saveTest",
-      no: "default",
+      no: "over",
     },
     saveTest: {
-      yes: "default",
-      no: "default",
+      yes: "over",
+      no: "over",
     },
   };
 
   const handleStateChange = (action) => {
+    const endState = stateTransitions[finishState];
     const nextState = stateTransitions[currentState];
-    if (typeof nextState === "string") {
-      setCurrentState(nextState);
+    if (isAllAnswered) {
+      if (typeof endState === "string") {
+        setFinishState(endState);
+      } else {
+        setFinishState(endState[action]);
+      }
     } else {
-      setCurrentState(nextState[action]);
+      if (typeof nextState === "string") {
+        setCurrentState(nextState);
+      } else {
+        setCurrentState(nextState[action]);
+      }
     }
   };
 
@@ -483,6 +500,10 @@ function Test(){
                           <div id="testProgressRight_bottomIn" className="Inside">
                             {isAllAnswered &&
                             <div className="Inside RELATIVE">
+                              
+
+                              {finishState === "finish" && (
+                              <>
                               <div className="ABSOLUTE UP HORIZONTALRECTANGULAR">
                                 <div className="Inside MIDDLE">
                                   {isPass &&
@@ -495,15 +516,48 @@ function Test(){
                               
                               <div className="ABSOLUTE DOWN HORIZONTALRECTANGULAR">
                                 <div className="Inside MIDDLE">
-                                  
+                                  <button onClick={() => handleStateChange()}>시험 완료</button>
                                 </div>
                               </div>
+                              </>
+                              )}
+
+                              {finishState === "end" && (
+                              <>
+                              <div className="ABSOLUTE UP HORIZONTALRECTANGULAR">
+                                <div className="Inside MIDDLE">
+                                  시험을 저장하시겠습니까?
+                                </div>
+                              </div>
+                              
+                              <div className="ABSOLUTE DOWN HORIZONTALRECTANGULAR">
+                                <div className="Inside MIDDLE">
+                                  <button
+                                    onClick={() => {
+                                      alert("시험이 저장되었습니다!");
+                                      handleStateChange("yes");
+                                      handleReset();
+                                    }}
+                                  >
+                                    네
+                                  </button>
+                                  <button onClick={() => 
+                                  {
+                                    handleStateChange("no");
+                                    handleReset();
+                                  }}>아니오</button>
+                                </div>
+                              </div>
+                              </>
+                              )}
+
                             </div>
+                            
                             || !isAllAnswered &&
                             <div className="Inside RELATIVE">
                               
 
-                              {currentState === "default" && (
+                              {currentState === "over" && (
                               <>
                               <div className="ABSOLUTE UP HORIZONTALRECTANGULAR">
                                 <div className="Inside MIDDLE">
