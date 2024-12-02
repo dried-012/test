@@ -177,16 +177,17 @@ function Test(){
         [fieldName]: {
           testList: selectedCollectionName,
           docTest: selectedDocId,
+          title: clickedTestTitle,
           date: timestamp,
           finalScore: score,
           pass: isPass,
           ...questionMaps,
         }
       }, { merge: true });
-      alert("시험 데이터가 저장되었습니다!");
+      alert("시험 결과가 저장되었습니다!");
     } catch (error) {
-      console.error("시험 데이터 저장 중 오류 발생:", error);
-      alert("시험 데이터 저장에 실패했습니다.");
+      console.error("시험 결과 저장 중 오류 발생:", error);
+      alert("시험 결과 저장에 실패했습니다.");
     }
   };
 
@@ -226,7 +227,7 @@ function Test(){
       
       <div>
         <span>
-              <h1 onClick={PageRs}>quiz test</h1>
+            <h1 onClick={PageRs}>quiz test</h1>
             </span>
           <div id="header">
             <div id="navigateDiv">
@@ -287,7 +288,7 @@ function Test(){
                           <h1 className="test-title"> 
                           {isLogined && <span>환영합니다. {uData?.email}님</span>} 
                           &nbsp;시험을 선택하세요.&nbsp;
-                          {!isLogined && <span>(로그인시 시험 결과 저장 가능)</span>}
+                          {!isLogined && <span>(로그인 후 시험 결과 저장 가능)</span>}
                           </h1>
                         )}
                       </div>

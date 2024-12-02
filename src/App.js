@@ -9,6 +9,7 @@ import MainPage from "./mainPage";
 import { Routes, Route } from 'react-router-dom'
 
 import './TestContent.css'
+import './MyPage.css'
 
 function App() {
 
