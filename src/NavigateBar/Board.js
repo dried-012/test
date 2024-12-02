@@ -23,7 +23,7 @@ function Board() {
   const [subject, setSubject] = useState("");
   const [file, setFile] = useState(null);
   const [boardCon, setBoardCon] = useState(false);
-  const {item} = location.state || {};
+  const { item } = location.state || {};
   const [boardRead, setBoardRead] = useState();
 
   async function getBoard() {
@@ -42,23 +42,23 @@ function Board() {
 
   useEffect(() => {
     const fetchBoardData = async () => {
-      try{
-        if(item){
+      try {
+        if (item) {
           console.log(item.id)
           setBoardCon(true);
           const data = await readBoard();
-          if(data){
-            setTitle(data.title||"");
-            setSubject(data.subject||"");
-            setFile(data.file||null);
+          if (data) {
+            setTitle(data.title || "");
+            setSubject(data.subject || "");
+            setFile(data.file || null);
           }
         }
-      }catch(error){
+      } catch (error) {
         console.log(error);
       }
     };
     fetchBoardData();
-  },[item]);
+  }, [item]);
 
   const pageUp = (e) => {
     e.preventDefault();
@@ -171,7 +171,7 @@ function Board() {
       }).catch((error) => {
         console.log(error.message);
       });
-    } catch(error) {
+    } catch (error) {
       console.log(error);
     }
   };
@@ -191,7 +191,7 @@ function Board() {
         date: Timestamp.now(),
         author: uData.email,
       };
-      if (item&&item?.id) {
+      if (item && item?.id) {
         // 기존 문서 업데이트
         const docRef = doc(db, "board", item.id);
         await updateDoc(docRef, newData);
@@ -236,22 +236,22 @@ function Board() {
     });
   }
 
-  const readBoard = async() =>{
+  const readBoard = async () => {
     const boardRef = item.id;
-    const docRef = doc(db,"board",boardRef);
+    const docRef = doc(db, "board", boardRef);
     try {
       const docSnap = await getDoc(docRef);
-      if(docSnap.exists){
+      if (docSnap.exists) {
         let data = docSnap.data();
-        if(data.date && data.date instanceof Timestamp){
+        if (data.date && data.date instanceof Timestamp) {
           data.date = data.date.toDate();
         }
         return data;
-      }else {
+      } else {
         console.error("No such Document");
         return null;
       }
-    }catch(error){
+    } catch (error) {
 
     }
   };
@@ -293,56 +293,56 @@ function Board() {
         </div>
       </div>
       <div id="loginDiv">
-      {!isLogined && !isSignup ? (
-              <form onSubmit={login}>
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="email@xxxxx.com"
-                  required
-                />
-                <input
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="비밀번호"
-                  required
-                />
-                <button type="submit">로그인</button>
-                <button type="button" onClick={() => setIsSignup(true)}>회원가입</button>
-              </form>
-            ) : !isLogined && isSignup ? (
-              <form onSubmit={userjoin}>
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="email@xxxxx.com"
-                  required
-                />
-                <input
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="비밀번호"
-                  required
-                />
-                <input
-                  type="password"
-                  id="checkPass"
-                  placeholder="비밀번호 확인"
-                  required
-                />
-                <button type="submit">회원가입</button>
-                <button type="button" onClick={() => setIsSignup(false)}>취소</button>
-              </form>
-            ) : (
-              <div className="dataDiv">
-                {uData?.email}
-                <button onClick={logout}>로그아웃</button>
-              </div>
-            )}
+        {!isLogined && !isSignup ? (
+          <form onSubmit={login}>
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="email@xxxxx.com"
+              required
+            />
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="비밀번호"
+              required
+            />
+            <button type="submit">로그인</button>
+            <button type="button" onClick={() => setIsSignup(true)}>회원가입</button>
+          </form>
+        ) : !isLogined && isSignup ? (
+          <form onSubmit={userjoin}>
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="email@xxxxx.com"
+              required
+            />
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="비밀번호"
+              required
+            />
+            <input
+              type="password"
+              id="checkPass"
+              placeholder="비밀번호 확인"
+              required
+            />
+            <button type="submit">회원가입</button>
+            <button type="button" onClick={() => setIsSignup(false)}>취소</button>
+          </form>
+        ) : (
+          <div className="dataDiv">
+            {uData?.email}
+            <button onClick={logout}>로그아웃</button>
+          </div>
+        )}
       </div>
       <div className='boardDiv'>
         <div className='boardTopDiv'>
@@ -400,6 +400,14 @@ function Board() {
             </form>
           </div>
         }
+      </div>
+      <div className='footerDiv'>
+        <div className='footerSubDiv'>
+          <span>
+            모든 문제들의 저작권은 원저작권자에게 있습니다. 본 사이트는 웹상에 공개되어 있는 문제만 모아서 보여드립니다.<br />
+            <a>본 페이지는 상업적 목적이 아닌 개인 포트폴리오용으로 제작되었습니다.</a>
+          </span>
+        </div>
       </div>
     </div>
   );
