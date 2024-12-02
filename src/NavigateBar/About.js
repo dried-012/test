@@ -64,11 +64,15 @@ function About() {
                 <div id="conMotivationDiv">
                     <h2>프로젝트 배경</h2>
                     <p>이 사이트는 사용자들이 학습을 더욱 재미있고 효과적으로 할 수 있도록 설계되었습니다.</p>
+                    <p>학습에 대한 접근성 개선</p>
+                    <p>이 웹사이트는 사용자가 문제를 풀고, 자신의 학습 데이터를 관리하며, 다른 사용자들과 소통할 수 있도록 설계되었습니다.</p>
+                    <p>개발자 역량 강화</p>
+                    <p>최신 웹 기술(Firebase, React, CSS 등)을 적용하고, 실질적인 사용자 경험을 반영하여 개발 역량을 성장시키는 데 중점을 두었습니다</p>
                 </div>
                 <div id="conTechDiv">
                     <h2>사용된 기술</h2>
                     <ul>
-                        <li>프론트엔드: React.js</li>
+                        <li>프론트엔드: React.js, java script</li>
                         <li>백엔드: Firebase</li>
                         <li>스타일링: CSS</li>
                     </ul>
