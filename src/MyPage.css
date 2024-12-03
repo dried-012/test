@@ -1,15 +1,33 @@
 .TestDate {
-    width: 35%;
-}
-
-.TestTitle {
     width: 30%;
 }
 
+.TestTitle {
+    width: 35%;
+}
+
 .TestScore {
-    width: 15%;
+    width: 8%;
 }
 
 .TestFinal {
-    width: 20%;
+    width: 14.5%;
+}
+
+.TestTermination {
+    width: 12.5%;
+}
+
+.TESTTITLE {
+    font-size: large;
+    font-weight: bold;
+}
+
+.TestTerminationCheck {
+    width: 50%;
+    float: left;
+}
+
+#testArchive {
+    text-align: center;
 }

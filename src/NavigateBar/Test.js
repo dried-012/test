@@ -160,7 +160,8 @@ function Test(){
     const timestamp = Timestamp.fromDate(new Date());
 
     const fieldName = `${uData?.email}_${time}_${selectedCollectionName}_${selectedDocId}`;
-
+    const reFieldName = fieldName.replace(/[^a-zA-Z0-9_]/g, "");
+    
     const questionMaps = {};
     Object.keys(selectedDocContent).forEach((key, index) => {
       const field = selectedDocContent[key];
@@ -174,13 +175,15 @@ function Test(){
     const saveRef = doc(db, "testComplete", "resultSave");
     try {
       await setDoc(saveRef, {
-        [fieldName]: {
+        [reFieldName]: {
+          user: uData?.email,
           testList: selectedCollectionName,
           docTest: selectedDocId,
           title: clickedTestTitle,
           date: timestamp,
           finalScore: score,
           pass: isPass,
+          timeSet: time,
           ...questionMaps,
         }
       }, { merge: true });

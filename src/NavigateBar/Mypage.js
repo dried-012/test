@@ -1,7 +1,7 @@
 import React from "react";
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom'
-import { doc, collection, getDoc, getDocs, setDoc, updateDoc, getFirestore, Timestamp } from 'firebase/firestore';
+import { doc, collection, getDoc, getDocs, setDoc, updateDoc, getFirestore, Timestamp, deleteField } from 'firebase/firestore';
 import { db,_apiKey } from '../firebase';
 import DOMPurify from 'dompurify';
 import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, setPersistence, browserSessionPersistence, onAuthStateChanged } from 'firebase/auth';
@@ -122,43 +122,79 @@ function Mypage(){
     }
 
     const [testResults, setTestResults] = useState([]);
+    const [testField, setTestField] = useState();
+    const [deleteConfirm, setDeleteConfirm] = useState(false);
 
     const testLoad = async () => {
-        if (!uData?.email) {
-          console.error("사용자 이메일이 없습니다!");
-          return;
-        }
-    
-        const saveRef = doc(db, "testComplete", "resultSave");
-    
-        try {
-          const docSnap = await getDoc(saveRef);
-    
-          if (docSnap.exists()) {
-            const data = docSnap.data();
-    
-            // 유저 이메일 기반 필터링
-            const userFields = Object.entries(data).filter(([key]) =>
-              key.startsWith(uData?.email)
-            );
-    
+      if (!uData?.email) {
+        console.error("사용자 이메일이 없습니다!");
+        return;
+      }
+      
+      const saveRef = doc(db, "testComplete", "resultSave");
+  
+      try {
+        const docSnap = await getDoc(saveRef);
+  
+        if (docSnap.exists()) {
+          const data = docSnap.data();
+          // 유저 이메일 기반 필터링
+          const userFields = Object.entries(data).filter(([key]) =>
+            key.startsWith((uData?.email).replace(/[^a-zA-Z0-9_]/g, ""))
+          );
+  
+          if (userFields.length === 0) {
+            console.log("이메일에 해당하는 데이터가 없습니다.");
+            setTestField(false);
+          } else {
             // 데이터 정렬: 최신 날짜순 (내림차순)
             const sortedResults = userFields
               .map(([key, value]) => value) // 필드 값만 추출
               .sort((a, b) => b.date.toDate() - a.date.toDate());
-    
-            setTestResults(sortedResults);
-          } else {
-            console.error("문서가 존재하지 않습니다!");
+              setTestField(true);
+            setTestResults(sortedResults);  // 데이터를 상태에 설정
           }
-        } catch (error) {
-          console.error("데이터 로드 중 오류 발생:", error);
+        } else {
+          console.error("문서가 존재하지 않습니다!");
         }
-      };
+      } catch (error) {
+        console.error("데이터 로드 중 오류 발생:", error);
+      }
+    };
 
-      useEffect(() => {
-        testLoad();
-      }, [uData?.email]);
+    const handleDelete = async (result) => {
+      // 삭제할 필드 이름 생성
+      const fieldName = `${uData.email}_${result.timeSet}_${result.testList}_${result.docTest}`;
+      const reFieldName = fieldName.replace(/[^a-zA-Z0-9_]/g, "");
+
+      const saveRef = doc(db, "testComplete", "resultSave");
+      try {
+        // Firestore 필드 삭제
+        await updateDoc(saveRef, {
+          [reFieldName]: deleteField(),
+        });
+        alert("삭제되었습니다.");
+        setDeleteConfirm(false)
+        // 삭제 후 데이터 새로고침
+        await testLoad();
+      } catch (error) {
+        console.error("삭제 중 오류 발생:", error);
+        alert("삭제에 실패했습니다.");
+      }
+    };
+
+    const checkDeleteConfirm = () => {
+      if (deleteConfirm) {
+        setDeleteConfirm(false);
+      }
+      else {
+        setDeleteConfirm(true);
+      }
+    }
+
+    useEffect(() => {
+      testLoad();
+    }, [uData?.email]);
 
     return(
     <div>
@@ -175,7 +211,7 @@ function Mypage(){
                 </ul>
             </div>
         </div>
-        <div className="contentDiv">
+        <div className="myPageDiv">
             <div>
                 <div id="loginDiv">
                     {!isLogined && !isSignup ? (
@@ -235,7 +271,6 @@ function Mypage(){
                             { isLogined && 
                                 <div>
                                     <h1> {uData?.email} 님의 마이페이지 </h1>
-                                    {/*<button onClick={() => testLoad()}>정보확인</button>*/}
                                 </div>
                                 || !isLogined &&
                                 <div>
@@ -243,14 +278,15 @@ function Mypage(){
                                 </div>
                             }
                         </div>
-                    
+                    <div id="testArchive">{isLogined &&<h1>시험 기록{!testField && <span>이 존재하지 않습니다!</span>} </h1>}</div>
                     <ul>
-                        {isLogined &&
+                        {isLogined && testField &&
                         <li>
-                        <div className="TestDate">날짜</div>
-                        <div className="TestTitle">시험</div>
-                        <div className="TestScore">점수</div>
-                        <div className="TestFinal">결과</div>   
+                        <div className="TestDate TESTTITLE">날짜</div>
+                        <div className="TestTitle TESTTITLE">시험</div>
+                        <div className="TestScore TESTTITLE">점수</div>
+                        <div className="TestFinal TESTTITLE">결과</div>   
+                        <div className="TestTermination TESTTITLE">기록</div>
                         </li>
                         }
                     </ul>
@@ -259,7 +295,7 @@ function Mypage(){
                     <div className='boardBodyDiv'>
                     
                     <ul>
-                        {isLogined && 
+                        {isLogined && testField &&
                         <div>
                         {testResults.map((result, index) => (
                             <li key={index}>
@@ -267,10 +303,29 @@ function Mypage(){
                             <div className="TestTitle">{result.title}</div>
                             <div className="TestScore">{result.finalScore}</div>
                             <div className="TestFinal">{result.pass ? "합격" : "불합격"}</div>
+                            {!deleteConfirm &&
+                            <div
+                              className="TestTermination"
+                              style={{ cursor: "pointer", color: "red" }}
+                              onClick={() => checkDeleteConfirm(true)}
+                            > 
+                              삭제
+                            </div>
+                            || deleteConfirm &&
+                            <div className="TestTermination">
+                              <div className="TestTerminationCheck" onClick={() => handleDelete(result)}>
+                                확인
+                              </div>
+                              <div className="TestTerminationCheck" onClick={() => checkDeleteConfirm(false)}>
+                                취소
+                              </div>
+                            </div>
+                            }
                             </li>
                         ))}
                         </div>
                         }
+
                     </ul>
                     
                     </div>
