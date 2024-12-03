@@ -1,5 +1,5 @@
 import React from "react";
-import '../css/Board.css';
+import '../css/about.css';
 import { db, _apiKey } from '../firebase';
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom'
@@ -33,7 +33,7 @@ function About() {
     return (
         <div className="wrapper">
             <span>
-                <h1 onClick={() => navigate("/")}>quiz test</h1>
+                <h1 className="siteTitle" onClick={() => navigate("/")}>quiz test</h1>
             </span>
             <div id="header">
                 <div id="navigateDiv">
@@ -81,8 +81,13 @@ function About() {
             <div className='footerDiv'>
                 <div className='footerSubDiv'>
                     <span>
-                        모든 문제들의 저작권은 원저작권자에게 있습니다. 본 사이트는 웹상에 공개되어 있는 문제만 모아서 보여드립니다.<br />
-                        <a>본 페이지는 상업적 목적이 아닌 개인 포트폴리오용으로 제작되었습니다.</a>
+                        <p>
+                            모든 문제들의 저작권은 원저작권자에게 있습니다. 본 사이트는 웹상에 공개된 문제만 모아서
+                            보여드립니다.
+                        </p>
+                        <p>
+                            <em>본 페이지는 상업적 목적이 아닌 개인 포트폴리오용으로 제작되었습니다.</em>
+                        </p>
                     </span>
                 </div>
             </div>

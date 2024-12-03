@@ -159,6 +159,7 @@ function BoardRead() {
           <div className='date'><span>날짜</span>{clickedBoardData?.date.toLocaleDateString()}</div>
           <div className='content'>{clickedBoardData?.subject}</div>
         </div>
+        
       </div>
       <div className='footerDiv'>
         <div className='footerSubDiv'>
