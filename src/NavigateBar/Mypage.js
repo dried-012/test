@@ -123,7 +123,7 @@ function Mypage(){
 
     const [testResults, setTestResults] = useState([]);
     const [testField, setTestField] = useState();
-    const [deleteConfirm, setDeleteConfirm] = useState(false);
+    const [deleteConfirm, setDeleteConfirm] = useState({});
 
     const testLoad = async () => {
       if (!uData?.email) {
@@ -162,7 +162,7 @@ function Mypage(){
       }
     };
 
-    const handleDelete = async (result) => {
+    const handleDelete = async (result, key) => {
       // 삭제할 필드 이름 생성
       const fieldName = `${uData.email}_${result.timeSet}_${result.testList}_${result.docTest}`;
       const reFieldName = fieldName.replace(/[^a-zA-Z0-9_]/g, "");
@@ -173,8 +173,8 @@ function Mypage(){
         await updateDoc(saveRef, {
           [reFieldName]: deleteField(),
         });
-        alert("삭제되었습니다.");
-        setDeleteConfirm(false)
+        alert("시험 기록이 삭제되었습니다.");
+        setDeleteConfirm(key, false)
         // 삭제 후 데이터 새로고침
         await testLoad();
       } catch (error) {
@@ -183,14 +183,12 @@ function Mypage(){
       }
     };
 
-    const checkDeleteConfirm = () => {
-      if (deleteConfirm) {
-        setDeleteConfirm(false);
-      }
-      else {
-        setDeleteConfirm(true);
-      }
-    }
+    const checkDeleteConfirm = (key, value) => {
+      setDeleteConfirm((prev) => ({
+        ...prev,
+        [key]: value,
+      }));
+    };
 
     useEffect(() => {
       testLoad();
@@ -303,20 +301,20 @@ function Mypage(){
                             <div className="TestTitle">{result.title}</div>
                             <div className="TestScore">{result.finalScore}</div>
                             <div className="TestFinal">{result.pass ? "합격" : "불합격"}</div>
-                            {!deleteConfirm &&
+                            {!deleteConfirm[index] &&
                             <div
                               className="TestTermination"
                               style={{ cursor: "pointer", color: "red" }}
-                              onClick={() => checkDeleteConfirm(true)}
+                              onClick={() => checkDeleteConfirm(index, true)}
                             > 
                               삭제
                             </div>
-                            || deleteConfirm &&
+                            || deleteConfirm[index] &&
                             <div className="TestTermination">
-                              <div className="TestTerminationCheck" onClick={() => handleDelete(result)}>
+                              <div className="TestTerminationCheck" style={{ cursor: "pointer", color: "orange" }} onClick={() => handleDelete(result, index)}>
                                 확인
                               </div>
-                              <div className="TestTerminationCheck" onClick={() => checkDeleteConfirm(false)}>
+                              <div className="TestTerminationCheck" style={{ cursor: "pointer", color: "green" }} onClick={() => checkDeleteConfirm(index, false)}>
                                 취소
                               </div>
                             </div>
